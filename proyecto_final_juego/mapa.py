@@ -3,17 +3,17 @@ from constantes import *
 from jugador import Jugador
 from enemigo import Enemy
 from plataformas import Plataforma
-from campfire import Campfire
+from bonfire import Bonfire
 class Mapa:
     def __init__(self,level_design,screen) -> None:
         self.platforms_list = []
         self.limits_list = []
         self.enemy_list = []
-        self.campfire_list = []
+        self.bonfire_list = []
         self.screen = screen    
-        self.setup_map(level_design)
         self.world_move_x = 0
-        self.keys = pygame.key.get_pressed()
+        self.setup_map(level_design)
+
     def setup_map(self,level_map):
 
         for column_index,column in enumerate(level_map):
@@ -41,8 +41,8 @@ class Mapa:
                     enemy = Enemy(platform_size,(x,y))
                     self.enemy_list.append(enemy)
                 if row == "F":
-                    campfire = Campfire(self.screen,(x,y),platform_size)
-                    self.campfire_list.append(campfire)
+                    campfire = Bonfire(self.screen,(x,y),platform_size)
+                    self.bonfire_list.append(campfire)
 
     def colliders_player_x(self,player):
         player.rect_jugador.x += player.direction_movement.x
@@ -91,10 +91,11 @@ class Mapa:
         for limit in self.limits_list:
             limit.update(self.world_move_x)
             limit.draw(self.screen)
-        
-        for camp in self.campfire_list:
-            camp.update(self.player,self.keys)
+
+        for camp in self.bonfire_list:
+            camp.update(self.player,self.world_move_x)
             camp.draw()
+
         for enemy in self.enemy_list:
             # enemy.enemy_movement(self.limits_list)
             enemy.update(self.world_move_x,self.limits_list,True)

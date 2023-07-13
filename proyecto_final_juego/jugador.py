@@ -1,7 +1,7 @@
 import pygame
 from constantes import *
 from funciones_utiles import *
-
+from fireball import Fireball
 class Jugador:
     def __init__(self,path,speed_walk,speed_run,jump_power,jump_height,gravity,size,pos) -> None:
         self.stay_frames_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,False,size)
@@ -16,7 +16,7 @@ class Jugador:
         self.shoot_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,True,size)
         self.shoot_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,False,size)
         
-
+        self.hability_fireball = Fireball()
 
 
 
@@ -92,16 +92,19 @@ class Jugador:
                 self.animation = self.attack_frame_r
             else:
                 self.animation = self.attack_frame_l
-            self.is_attacking = True
+            self.is_attacking = True  
         else:
             self.is_attacking = False    
     #disparo
     def shoot(self):
         if self.is_shooting and self.mana > 0:
+            self.mana -= 10
             if self.direction:
                 self.animation = self.shoot_frame_r
             else:
                 self.animation = self.shoot_frame_l
+        else:
+            print(f"tenes{self.mana}, se necesita 10 de mana para lanzar")
 
     def inputs(self):
         keys = pygame.key.get_pressed()
@@ -154,7 +157,7 @@ class Jugador:
                 self.frame += 1
             else:
                 self.frame = 0
-            print(f"mana:{self.mana}\nHP{self.hp}")
+            # print(f"mana:{self.mana}\nHP{self.hp}")
         
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
@@ -179,6 +182,7 @@ class Jugador:
         else:
             self.frame = 0
         screen.blit(self.imagen_jugador,self.rect_jugador)
+        
         self.stat_bar(screen=screen,path="",x=25,y=25,size=(0,0),color=G,stat=self.hp)
         self.stat_bar(screen=screen,path="",x=25,y=50,size=(0,0),color=B,stat=self.mana)
         # screen.blit(self)

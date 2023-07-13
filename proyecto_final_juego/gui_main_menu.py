@@ -19,25 +19,25 @@ class Main_menu(Menu):
         if button == "new_game":
             if self.button_dict[button].is_active:
                 self.is_active = False
+                
     def setup_buttons_form(self,path):
         for button_name in self.setup_menu:
             if button_name == "title":
-                button = Button(main_screen=self.main_screen,menu_screen=self.surface_menu,w=300,h=80,x=(DICT_MENU_WIDHT["640"]/2)-150,y=100,path=path,image_name=button_name,action=self.button_action,name=button_name)
+                button = Button(main_screen=self.main_screen,w=300,h=80,x=(DICT_RESOLUTION_WIDHT["1280"]/2)-150,y=100,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
             if button_name == "new_game":
-                button = Button(main_screen=self.main_screen,menu_screen=self.surface_menu,w=260,h=50,x=(DICT_MENU_WIDHT["640"]/2)-130,y=200,path=path,image_name=button_name,action=self.button_action,name=button_name)
+                button = Button(main_screen=self.main_screen,w=260,h=50,x=(DICT_RESOLUTION_WIDHT["1280"]/2)-130,y=200,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
             if button_name == "load_game":
-                button = Button(main_screen=self.main_screen,menu_screen=self.surface_menu,w=260,h=50,x=(DICT_MENU_WIDHT["640"]/2)-130,y=270,path=path,image_name=button_name,action=self.button_action,name=button_name)
+                button = Button(main_screen=self.main_screen,w=260,h=50,x=(DICT_RESOLUTION_WIDHT["1280"]/2)-130,y=270,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
             if button_name == "options":
-                button = Button(main_screen=self.main_screen,menu_screen=self.surface_menu,w=260,h=50,x=(DICT_MENU_WIDHT["640"]/2)-130,y=350,path=path,image_name=button_name,action=self.button_action,name=button_name)
+                button = Button(main_screen=self.main_screen,w=260,h=50,x=(DICT_RESOLUTION_WIDHT["1280"]/2)-130,y=350,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
             if button_name == "exit":
-                button = Button(main_screen=self.main_screen,menu_screen=self.surface_menu,w=260,h=50,x=(DICT_MENU_WIDHT["640"]/2)-130,y=DICT_MENU_HEIGHT["720"]-200,path=path,image_name=button_name,action=self.button_action,name=button_name)
+                button = Button(main_screen=self.main_screen,w=260,h=50,x=(DICT_RESOLUTION_WIDHT["1280"]/2)-130,y=DICT_RESOLUTION_HEIGHT["720"]-200,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
 
-    # def setup_buttoms_actions(self):
 
 
     def update(self,event_list):
