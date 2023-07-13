@@ -12,8 +12,13 @@ class Jugador:
         self.run_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,True,size)
         self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),5,False,size)
         self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),5,True,size)
-        # self.jump_frame_l = getSurfaceFromSprites("{0}".format(PATH_JUGADOR),9,6,1,False,size)
-        # self.jump_frame_r = getSurfaceFromSprites("{0}".format(PATH_JUGADOR),9,6,1,False,size)
+
+        self.shoot_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,True,size)
+        self.shoot_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,False,size)
+        
+
+
+
 
         self.frame = 0
         self.animation = self.stay_frames_r
@@ -29,8 +34,27 @@ class Jugador:
         self.start_jump = 0
         self.is_attacking = False
         self.is_jumping = False
+        self.is_shooting = False
         self.gravity = gravity
         self.tiempo_transcurrido = 0
+        #
+        self.hp = 100
+        self.mana = 100
+        
+
+
+    # HUD
+
+    def stat_bar(self,screen,path,x,y,size,color,stat):
+        widht = 300
+        height = 20
+        stat_calc = int((stat / 100)* widht)
+        # surface_borde = getSurface(path=path,frame=0,flag_flip=True,size=(size[0],size[1]))
+        rect_borde = pygame.Rect(x,y,widht,height)
+        rect_stat = pygame.Rect(x,y,stat_calc,height)
+        pygame.draw.rect(screen,R,rect_borde,1)
+        pygame.draw.rect(screen,color,rect_stat)
+        # screen.blit((25,25),(25,25))
 
     #quieto
     def stay(self):
@@ -71,6 +95,13 @@ class Jugador:
             self.is_attacking = True
         else:
             self.is_attacking = False    
+    #disparo
+    def shoot(self):
+        if self.is_shooting and self.mana > 0:
+            if self.direction:
+                self.animation = self.shoot_frame_r
+            else:
+                self.animation = self.shoot_frame_l
 
     def inputs(self):
         keys = pygame.key.get_pressed()
@@ -97,7 +128,17 @@ class Jugador:
         
         if keys[pygame.K_z]:
             self.attack()
-    
+        
+        if keys[pygame.K_x]:
+            self.is_shooting = True
+            self.shoot()
+        else:
+            self.is_shooting = False
+        
+        if keys[pygame.K_0]:
+            self.hp -= 10
+            self.mana -= 10
+        
     
     def apply_gravity(self):
         self.direction_movement.y += self.gravity
@@ -113,7 +154,11 @@ class Jugador:
                 self.frame += 1
             else:
                 self.frame = 0
-
+            print(f"mana:{self.mana}\nHP{self.hp}")
+        
+        if (self.tiempo_transcurrido >= 500):
+            while(self.mana == 100):
+                self.mana += 1
         #Salto
         if (self.start_jump - self.rect_jugador.bottom) == self.jump_height:
             self.direction_movement.y = 0
@@ -121,13 +166,21 @@ class Jugador:
         if self.start_jump == self.rect_jugador.bottom:
             self.is_jumping = False
 
+            
+        if self.hp < 0:
+            self.hp = 0
+        if self.mana < 0:
+            self.mana = 0
+        
+
     def draw(self,screen):
         if self.frame < len(self.animation):
             self.imagen_jugador = self.animation[self.frame]
         else:
             self.frame = 0
-
         screen.blit(self.imagen_jugador,self.rect_jugador)
-        
+        self.stat_bar(screen=screen,path="",x=25,y=25,size=(0,0),color=G,stat=self.hp)
+        self.stat_bar(screen=screen,path="",x=25,y=50,size=(0,0),color=B,stat=self.mana)
+        # screen.blit(self)
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_jugador,1)

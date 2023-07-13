@@ -16,6 +16,7 @@ PATH_WALK = "walk/"
 PATH_RUN = "run/"
 PATH_JUMP = "jump/"
 PATH_ATTACK = "attack/"
+PATH_SHOOT = "shoot/"
 PATH_FONDO = "{0}/fondo/".format(PATH_RECURSOS)
 PATH_TERRENO = "{0}terreno/".format(PATH_FONDO)
 PATH_AGUA = "{0}agua/".format(PATH_FONDO)
@@ -25,7 +26,7 @@ PATH_PLATAFORMA = "{0}plataforma/".format(PATH_FONDO)
 R = (255,0,0)
 G = (0,255,0)
 B = (0,0,255)
-B = (0,0,0)
+BLACK = (0,0,0)
 W = (255,255,255)
 
 #direccion
@@ -37,32 +38,34 @@ platform_size = 52
 
 
 level_map = [
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    'X                            X',
-    'X                            X',
-    'X                            X',
-    'X                            X',
-    'X                            X',
-    'X                            X',
-    'X                            X',
-    'X                            X',
-    'X          L   E    L        X',
-    'X           PPPPPPPP         X',
-    'X                            X',
-    'X    P                       X',
-    'ICCCCCCCCCCCCCCCCCCCCCCCCCCCCD',
-    'ITTTTTTTTTTTTTTTTTTTTTTTTTTTTD'
-
+    'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    'C                                                  C',
+    'C                                                  C',
+    'C                                                  C',
+    'C                                                  C',
+    'C                                                  C',
+    'C                                                  C',
+    'C                                                  C',
+    'C          L   E    L                              C',
+    'C           PPPPPPPP                               C',
+    'C                                                  C',
+    'C    P                                             C',
+    'ICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD',
+    'ITTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTD',
+    'ITTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTD'
 ]
-
 #definimos las dimensiones iniciales de la pantalla
-ANCHO_PANTALLA = 1200
-ALTO_PANTALLA = len(level_map) * platform_size
-#form map
-#Menu
-ANCHO_MENU = ANCHO_PANTALLA/2
-ALTO_MENU = ALTO_PANTALLA
+# ANCHO_PANTALLA = 1920
+# ALTO_PANTALLA = 1080
 
+DICT_RESOLUTION_WIDHT = {"1920":1920,"1280":1280,"1024":1024,"800":800}
+DICT_RESOLUTION_HEIGHT = {"1080":1080,"720":720,"768":768,"600":600}
+
+# #Menu
+DICT_MENU_WIDHT = {"960":960,"640":640,"512":512,"400":400}
+DICT_MENU_HEIGHT = {"1080":1080,"720":720,"768":768,"600":600}
+
+#setup menu
 SETUP_MAIN_MENU = ["title","new_game","load_game","options","exit"]
 
 #JUGADOR
