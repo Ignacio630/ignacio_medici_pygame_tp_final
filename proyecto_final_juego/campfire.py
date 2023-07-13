@@ -10,8 +10,10 @@ class Campfire:
 
     def update(self,player,keys):
 
-        if player.rec_jugador.colliderect(self.rect) and keys[pygame.K_e]:
+        if player.rect_jugador.colliderect(self.rect) and keys[pygame.K_e]:
             player.hp = 100
             player.mana = 100
+            
     def draw(self):
+
         self.screen.blit(self.surface,self.rect)

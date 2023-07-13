@@ -49,7 +49,7 @@ level_map = [
     'C          L   E    L                              C',
     'C           PPPPPPPP                               C',
     'C                                                  C',
-    'C    P                                             C',
+    'C    P                    F                        C',
     'ICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD',
     'ITTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTD',
     'ITTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTD'
