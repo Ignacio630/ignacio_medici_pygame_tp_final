@@ -11,8 +11,8 @@ class Fireball:
         self.is_collition = False
         self.speed = 0
 
-    def update(self,world_move_x):
-        self.rect.x += world_move_x + self.speed
+    def update(self,world_move):
+        self.rect.x += world_move.x + self.speed
         
         if not self.is_avaible:
             current_time = pygame.time.get_ticks()

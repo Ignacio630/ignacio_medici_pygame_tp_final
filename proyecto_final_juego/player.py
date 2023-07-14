@@ -1,5 +1,6 @@
 import pygame
 from config import *
+from levels import *
 from funciones_utiles import *
 from fireball import Fireball
 class Player:
@@ -157,6 +158,9 @@ class Player:
             else:
                 self.frame = 0
         
+        self.rect_jugador.x += self.direction_movement.x * self.speed_walk
+
+
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
                 self.mana += 1
@@ -171,7 +175,18 @@ class Player:
             self.hp = 0
         if self.mana < 0:
             self.mana = 0
-        
+    
+    def map_actions(self, world_move):
+        if self.direction_movement.x < 0 and self.rect_jugador.x < RESOLUTION_WIDTH / 3:
+            world_move.x = 6
+            print(world_move.x)
+            self.speed_walk = 0
+        elif self.direction_movement.x > 0 and self.rect_jugador.x > RESOLUTION_WIDTH - (RESOLUTION_WIDTH / 2):
+            world_move.x = -6
+            self.speed_walk = 0
+        else:
+            world_move.x = 0
+            self.speed_walk = SPEED_WALK
 
     def draw(self,screen):
         if self.frame < len(self.animation):

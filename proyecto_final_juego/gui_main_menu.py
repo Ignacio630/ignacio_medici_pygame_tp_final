@@ -1,8 +1,8 @@
 import pygame
-from config import *
 from gui_menu import Menu
 from gui_boton import Button
 from gui_load_level import LoadLevel
+from config import *
 class Main_menu(Menu):
 
     def __init__(self, name, main_screen, x, y, w, h, path, image_name, active,setup_menu) -> None:

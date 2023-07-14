@@ -8,8 +8,8 @@ class Plataforma:
         self.surface = getSurface(path=path,frame=frame,flag_flip=flag,size=(size,size))
         self.rect = self.surface.get_rect(topleft = pos)
 
-    def update(self,world_speed_x):
-        self.rect.x += world_speed_x
+    def update(self,world_speed):
+        self.rect.x += world_speed.x
 
     def draw(self,screen):
         screen.blit(self.surface,self.rect)

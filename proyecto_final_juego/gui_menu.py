@@ -1,8 +1,8 @@
 import pygame
 
 from funciones_utiles import *
-
-class Menu:
+from gui_boton import Button
+class Menu(Button):
     menu_names = {}
     def __init__(self,name,main_screen,x,y,w,h,path,image_name,is_active) -> None:
         self.menu_names[name] = self

@@ -30,7 +30,7 @@ class LoadLevel(Menu):
             if button_name == "level_3":
                 button = Button(main_screen=self.main_screen,w=260,h=50,x=(RESOLUTION_WIDTH/2)-130,y=350,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
-            if button_name == "volver":
+            if button_name == "exit":
                 button = Button(main_screen=self.main_screen,w=260,h=50,x=(RESOLUTION_WIDTH/2)-130,y=RESOLUTION_HEIGHT-200,path=path,image_name=button_name,action=self.button_action,name=button_name)
                 self.button_dict[button_name] = button
 

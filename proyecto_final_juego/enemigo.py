@@ -12,8 +12,10 @@ class Enemy:
         self.speed = 3
         self.direction.x = self.speed
         self.direction.y = self.speed
+        
     def enemy_movement_x(self,limits,world_speed):
-        self.rect_enemy.x += world_speed + self.direction.x
+        self.rect_enemy.x += world_speed.x + self.direction.x
+
         for limit in limits:
             if self.rect_enemy.colliderect(limit.rect):
                 if self.direction.x > 0:

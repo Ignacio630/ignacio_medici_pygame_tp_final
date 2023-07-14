@@ -14,9 +14,9 @@ class Bonfire:
         self.rect = self.surface.get_rect(topleft=pos)
         self.current_time = 0
 
-    def update(self,player,world_speed_x,delta_ms):
+    def update(self,player,world_speed,delta_ms):
         self.current_time += delta_ms
-        self.rect.x += world_speed_x  
+        self.rect.x += world_speed.x
         keys = pygame.key.get_pressed()
 
         if player.rect_jugador.colliderect(self.rect):
