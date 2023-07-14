@@ -1,15 +1,19 @@
 import pygame 
-from constantes import * 
-from jugador import Jugador
+from config import *
+from funciones_utiles import *
+from player import Player
 from enemigo import Enemy
 from plataformas import Plataforma
 from bonfire import Bonfire
+
 class Mapa:
-    def __init__(self,level_design,screen) -> None:
+    def __init__(self,level_design,screen,path_musica,volumen) -> None:
         self.platforms_list = []
         self.limits_list = []
         self.enemy_list = []
         self.bonfire_list = []
+        self.musica_fondo = cargar_musica(path=path_musica,volumen=volumen,repetir=-1)
+        self.music_playing = False
         self.screen = screen    
         self.world_move_x = 0
         self.setup_map(level_design)
@@ -33,10 +37,10 @@ class Mapa:
                     plataforma = Plataforma((x,y),platform_size,path="{0}".format(PATH_TERRENO),flag=True,frame=4)
                     self.platforms_list.append(plataforma)
                 if row == "L":
-                    plataforma = Plataforma((x,y),platform_size,path="{0}".format(PATH_TERRENO),flag=True,frame=1)
+                    plataforma = Plataforma((x,y),platform_size,path="{0}".format(PATH_PLATAFORMA),flag=True,frame=15)
                     self.limits_list.append(plataforma)
                 if row == "P":
-                    self.player = Jugador(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-16,jump_height=200,gravity=0.8,size=(50,90),pos=(x,y))
+                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-16,jump_height=200,gravity=0.8,size=(50,90),pos=(x,y))
                 if row == "E":
                     enemy = Enemy(platform_size,(x,y))
                     self.enemy_list.append(enemy)
@@ -45,7 +49,7 @@ class Mapa:
                     self.bonfire_list.append(campfire)
 
     def colliders_player_x(self,player):
-        player.rect_jugador.x += player.direction_movement.x
+        player.rect_jugador.x += player.direction_movement.x * player.speed_walk
         
         for platform in self.platforms_list:
             if platform.rect.colliderect(player.rect_jugador):
@@ -55,7 +59,13 @@ class Mapa:
                 elif player.direction_movement.x > 0:
                     player.rect_jugador.right = platform.rect.left
                     player.direction_movement.x = 0
-                    
+    
+    def music_is_playing(self,volumen):
+        if volumen == 0:
+            self.music_playing = False
+        else: 
+            self.music_playing = True
+            
     def colliders_player_y(self,player):
         player = self.player
         player.apply_gravity()
@@ -69,16 +79,16 @@ class Mapa:
                     player.rect_jugador.bottom = platform.rect.top                
                     player.direction_movement.y = 0
             
-    def player_camara(self,player):
-        if player.direction_movement.x < 0:
-            self.world_move_x = SPEED_WALK
+    def player_camara(self,player,player_x,direction_x):
+        if  direction_x < 0:
+            self.world_move_x = 8
             player.walk_speed = 0
-        elif player.direction_movement.x > 0:
-            self.world_move_x = -SPEED_WALK
+        elif direction_x > 0:
+            self.world_move_x = -8
             player.walk_speed = 0
         else:
             self.world_move_x = 0
-            player.walk_speed = SPEED_WALK
+            player.walk_speed = 5
 
     def run(self,delta_ms):
         #fondo
@@ -92,18 +102,22 @@ class Mapa:
             limit.update(self.world_move_x)
             limit.draw(self.screen)
 
-        for camp in self.bonfire_list:
-            camp.update(self.player,self.world_move_x)
-            camp.draw()
+        for bonfire in self.bonfire_list:
+            bonfire.update(self.player,self.world_move_x,delta_ms)
+            bonfire.draw()
 
+        
         for enemy in self.enemy_list:
             # enemy.enemy_movement(self.limits_list)
             enemy.update(self.world_move_x,self.limits_list,True)
             enemy.draw(self.screen)
 
         #jugador
-        self.player_camara(self.player)
+        player = self.player
+        self.player_camara(player,player.rect_jugador.x,player.direction_movement.x)
         self.player.update(delta_ms)
+        self.player.hability_fireball.update(world_move_x=self.world_move_x)
+        self.player.hability_fireball.draw(self.screen)
         self.colliders_player_x(self.player)
         self.colliders_player_y(self.player)
         self.player.draw(self.screen)

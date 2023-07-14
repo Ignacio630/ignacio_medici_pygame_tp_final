@@ -1,5 +1,5 @@
 import pygame
-from constantes import * 
+from config import * 
 from funciones_utiles import *
 
 class Plataforma:

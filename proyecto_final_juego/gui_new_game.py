@@ -1,6 +1,6 @@
 import pygame
 
-from constantes import *
+from config import *
 from mapa import Mapa
 from gui_menu import Menu
 

@@ -1,8 +1,8 @@
 import pygame
-from constantes import *
+from config import *
 from funciones_utiles import *
 from fireball import Fireball
-class Jugador:
+class Player:
     def __init__(self,path,speed_walk,speed_run,jump_power,jump_height,gravity,size,pos) -> None:
         self.stay_frames_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,False,size)
         self.stay_frames_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,True,size)
@@ -16,7 +16,7 @@ class Jugador:
         self.shoot_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,True,size)
         self.shoot_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,False,size)
         
-        self.hability_fireball = Fireball()
+        self.hability_fireball = Fireball(path="{0}{1}".format(path,PATH_FIREBALL),pos=pos,size=(50,25),frame=7)
 
 
 
@@ -26,7 +26,7 @@ class Jugador:
         self.rect_jugador = self.imagen_jugador.get_rect(topleft = pos)
 
         self.direction = DIRECCION
-        self.direction_movement = pygame.math.Vector2(0,0)
+        self.direction_movement = pygame.math.Vector2()
         self.speed_walk = speed_walk
         self.speed_run = speed_run
         self.jump_power = jump_power
@@ -38,24 +38,20 @@ class Jugador:
         self.gravity = gravity
         self.tiempo_transcurrido = 0
         #
-        self.hp = 100
-        self.mana = 100
+        self.hp = VIDA_JUGADOR
+        self.mana = MANA_JUGADOR
         
 
 
     # HUD
-
-    def stat_bar(self,screen,path,x,y,size,color,stat):
+    def stat_bar(self,screen,x,y,color,stat):
         widht = 300
         height = 20
         stat_calc = int((stat / 100)* widht)
-        # surface_borde = getSurface(path=path,frame=0,flag_flip=True,size=(size[0],size[1]))
         rect_borde = pygame.Rect(x,y,widht,height)
         rect_stat = pygame.Rect(x,y,stat_calc,height)
-        pygame.draw.rect(screen,R,rect_borde,1)
         pygame.draw.rect(screen,color,rect_stat)
-        # screen.blit((25,25),(25,25))
-
+        pygame.draw.rect(screen,BLACK,rect_borde,3)
     #quieto
     def stay(self):
         if self.direction:
@@ -65,18 +61,18 @@ class Jugador:
     #caminar izq-der
     def walk(self,direccion):
         if direccion:
-            self.direction_movement.x = self.speed_walk
+            self.direction_movement.x = 1
             self.animation = self.walk_frame_r
         elif not direccion:
-            self.direction_movement.x = -self.speed_walk
+            self.direction_movement.x = -1
             self.animation = self.walk_frame_l
     #correr
     def run(self,direccion):
         if direccion:
-            self.direction_movement.x = self.speed_run
+            self.direction_movement.x = 1
             self.animation = self.run_frame_r
         else:
-            self.direction_movement.x = -self.speed_run
+            self.direction_movement.x = -1
             self.animation = self.run_frame_l
     #saltar
     def jump(self):
@@ -101,9 +97,12 @@ class Jugador:
             self.mana -= 10
             if self.direction:
                 self.animation = self.shoot_frame_r
+                self.hability_fireball.speed += 10
             else:
                 self.animation = self.shoot_frame_l
+                self.hability_fireball.speed -= 10
         else:
+            self.hability_fireball.speed = 0
             print(f"tenes{self.mana}, se necesita 10 de mana para lanzar")
 
     def inputs(self):
@@ -157,7 +156,6 @@ class Jugador:
                 self.frame += 1
             else:
                 self.frame = 0
-            # print(f"mana:{self.mana}\nHP{self.hp}")
         
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
@@ -168,7 +166,6 @@ class Jugador:
         
         if self.start_jump == self.rect_jugador.bottom:
             self.is_jumping = False
-
             
         if self.hp < 0:
             self.hp = 0
@@ -181,10 +178,10 @@ class Jugador:
             self.imagen_jugador = self.animation[self.frame]
         else:
             self.frame = 0
+
         screen.blit(self.imagen_jugador,self.rect_jugador)
         
-        self.stat_bar(screen=screen,path="",x=25,y=25,size=(0,0),color=G,stat=self.hp)
-        self.stat_bar(screen=screen,path="",x=25,y=50,size=(0,0),color=B,stat=self.mana)
-        # screen.blit(self)
+        self.stat_bar(screen=screen,x=25,y=25,color=G,stat=self.hp)
+        self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_jugador,1)

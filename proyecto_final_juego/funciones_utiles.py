@@ -1,5 +1,5 @@
 import pygame
-from constantes import *
+from config import *
 
 def getSurfaceFromSeparateSprite(path:str,frames:int,flag_flip:bool,size:tuple):
     lista_frames = []   
@@ -35,3 +35,37 @@ def getSurfaceFromSprites(path:str,columnas:int,filas:int,step:int,flag_flip:boo
                 surface_frame = pygame.transform.flip(surface_frame,True,False)
             lista_frames.append(surface_frame)
     return lista_frames
+
+
+def cargar_musica(path: str, volumen: float, repetir: int) -> None:
+    '''
+    Descripcion: Carga la musica del juego
+
+    Parametros:
+        path: ruta de la musica
+        volumen: volumen de la musica
+        repetir: numero de veces que se repite la musica
+
+    Retorno: None
+    '''
+
+    pygame.mixer.music.load(path)
+    pygame.mixer.music.set_volume(volumen)
+    pygame.mixer.music.play(repetir)
+
+def apagar_musica():
+    pygame.mixer.music.stop()
+
+def cargar_sonido(path: str, volumen: float) -> None:
+    '''
+    Descripcion: Carga los sonidos del juego
+
+    Parametros:
+        path: ruta del sonido
+        volumen: volumen del sonido
+
+    Retorno: None
+    '''
+    sonido = pygame.mixer.Sound(path)
+    sonido.set_volume(volumen)
+    sonido.play()

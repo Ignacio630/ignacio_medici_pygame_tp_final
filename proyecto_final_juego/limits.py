@@ -1,7 +1,5 @@
 import pygame
-from constantes import *
-
-
+from config import *
 
 class Limits:
 
@@ -10,7 +8,5 @@ class Limits:
         self.rect = self.surface.get_rect(topleft=pos)
         self.screen = screen
     
-    
-
     def draw(self):
         self.screen.blit(self.surface,self.rect)
