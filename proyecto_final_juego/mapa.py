@@ -12,18 +12,18 @@ class Mapa:
         self.limits_list = []
         self.enemy_list = []
         self.bonfire_list = []
-        self.background_list = getSurfaceFromSeparateSprite(path=path_fondo,frames=2,flag_flip=False,size=(800,720))
+        self.background_list = getSurfaceFromSeparateSprite(path=path_fondo,frames=5,flag_flip=False,size=(1980,RESOLUTION_HEIGHT))
         self.musica_fondo = cargar_musica(path=path_musica,volumen=volumen,repetir=-1)
         self.music_playing = False
         self.screen = screen    
         self.world_move = pygame.math.Vector2()
         self.setup_map(level_design)
-        
+
     def draw_background(self):
         for x in range(0,len(self.background_list)):
             speed = 1
             for background in self.background_list:
-                self.screen.blit(background,((x*720) - 0 * speed,0))
+                self.screen.blit(background,((x*RESOLUTION_HEIGHT) - 6 * speed,0))
                 speed += 0.2
 
 
@@ -90,6 +90,7 @@ class Mapa:
 
     def run(self,delta_ms):
         #fondo
+        # self.screen.fill(W)
         self.draw_background()
         #mundo
         for platform in self.platforms_list:

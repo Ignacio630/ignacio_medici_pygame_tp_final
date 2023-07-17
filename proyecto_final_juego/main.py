@@ -6,7 +6,8 @@ from gui_options_menu import Options
 from gui_load_level import LoadLevel
 from mapa import Mapa
 
-pantalla = pygame.display.set_mode((RESOLUTION_WIDTH, RESOLUTION_HEIGHT))
+pantalla = pygame.display.set_mode((RESOLUTION_WIDTH, RESOLUTION_HEIGHT),pygame.FULLSCREEN)
+pygame.display.set_caption("Souls like")
 pygame.init()
 
 tiempo = pygame.time.Clock()
@@ -24,7 +25,7 @@ menu_actual = main_menu
 
 # bucle principal
 while esta_corriendo:
-    delta_ms = tiempo.tick(FPS)  
+    delta_ms = tiempo.tick(FPS)
     event_list = pygame.event.get()
     keys = pygame.key.get_pressed()
     for event in event_list: 
@@ -32,7 +33,6 @@ while esta_corriendo:
             esta_corriendo = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
-            
 
     
     mapa_1.run(delta_ms=delta_ms)

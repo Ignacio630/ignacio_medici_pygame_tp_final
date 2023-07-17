@@ -7,6 +7,13 @@ level_map_1 = [
     'C                                                                  C',
     'C                                                                  C',
     'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
     'C                               L     E      L                     C',
     'C                                CCCCCCCCCCCC                      C',
     'C                       CCC                                        C',
@@ -54,7 +61,7 @@ level_map_3 = [
 ]
 
 
-RESOLUTION_WIDTH = 800  
+RESOLUTION_WIDTH = 1980  
 RESOLUTION_HEIGHT = len(level_map_1) * 52
 # #Menu
 MENU_WIDTH = 400

@@ -1,10 +1,10 @@
 import pygame
 from levels import *
 #fotogramas por segundo del juego
-FPS = 60   
+FPS = 60 
 
 #debug
-DEBUG = True
+DEBUG = False
 
 #definimos la direccion de la carpeta con los recursos
 

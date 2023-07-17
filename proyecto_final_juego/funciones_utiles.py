@@ -5,7 +5,7 @@ def getSurfaceFromSeparateSprite(path:str,frames:int,flag_flip:bool,size:tuple):
     lista_frames = []   
 
     for frame in range(0,frames):
-        surface_sprite = pygame.image.load("{0}{1}.png".format(path,frame))
+        surface_sprite = pygame.image.load("{0}{1}.png".format(path,frame)).convert_alpha()
         surface_sprite = pygame.transform.scale(surface_sprite,size)
         if flag_flip:
             surface_sprite = pygame.transform.flip(surface_sprite,True,False)
@@ -13,7 +13,7 @@ def getSurfaceFromSeparateSprite(path:str,frames:int,flag_flip:bool,size:tuple):
     return lista_frames
 
 def getSurface(path:str,frame:int,flag_flip:bool,size:tuple):
-    surface_sprite = pygame.image.load("{0}{1}.png".format(path,frame))
+    surface_sprite = pygame.image.load("{0}{1}.png".format(path,frame)).convert_alpha()
     surface_sprite = pygame.transform.scale(surface_sprite,size)
     if flag_flip:
         surface_sprite = pygame.transform.flip(surface_sprite,True,False)
@@ -21,7 +21,7 @@ def getSurface(path:str,frame:int,flag_flip:bool,size:tuple):
 
 def getSurfaceFromSprites(path:str,columnas:int,filas:int,step:int,flag_flip:bool,size:tuple):
     lista_frames = []
-    surface_sprite = pygame.image.load(path)
+    surface_sprite = pygame.image.load(path).convert_alpha()
     surface_sprite = pygame.transform.scale(surface_sprite,size)
     ancho_frame = (surface_sprite.get_width()/columnas)
     alto_frame = (surface_sprite.get_height()/filas)

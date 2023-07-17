@@ -179,7 +179,6 @@ class Player:
     def map_actions(self, world_move):
         if self.direction_movement.x < 0 and self.rect_jugador.x < RESOLUTION_WIDTH / 3:
             world_move.x = 6
-            print(world_move.x)
             self.speed_walk = 0
         elif self.direction_movement.x > 0 and self.rect_jugador.x > RESOLUTION_WIDTH - (RESOLUTION_WIDTH / 2):
             world_move.x = -6
