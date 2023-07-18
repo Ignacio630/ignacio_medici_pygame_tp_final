@@ -4,15 +4,16 @@ from config import*
 class Enemy:
 
     def __init__(self,size,pos) -> None:
+        self.is_dead = False
         self.surface_enemy = pygame.surface.Surface((size,size))
-        self.surface_enemy.fill(G)
+        self.surface_enemy.fill(R)
         self.rect_enemy = self.surface_enemy.get_rect(topleft = pos)
         
         self.direction = pygame.math.Vector2(0,0)
         self.speed = 3
         self.direction.x = self.speed
         self.direction.y = self.speed
-        
+
     def enemy_movement_x(self,limits,world_speed):
         self.rect_enemy.x += world_speed.x + self.direction.x
 
@@ -44,7 +45,8 @@ class Enemy:
 
 
     def draw(self,screen):
-        screen.blit(self.surface_enemy,self.rect_enemy)
+        if not self.is_dead:
+            screen.blit(self.surface_enemy,self.rect_enemy)
         
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_enemy,1)

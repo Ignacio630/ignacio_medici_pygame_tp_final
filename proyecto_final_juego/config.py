@@ -37,7 +37,6 @@ W = (255,255,255)
 #direccion
 
 DIRECCION = True
-DEBUG = True
 
 platform_size = 52
 
@@ -56,5 +55,5 @@ ANCHO_JUGADOR = 0
 ALTO_JUGADOR = 0
 
 SPEED_WALK = 4
-SPEED_RUN = SPEED_WALK * 1.20 
+SPEED_RUN = SPEED_WALK * 1.80 
 

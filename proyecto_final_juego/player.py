@@ -41,9 +41,8 @@ class Player:
         #
         self.hp = VIDA_JUGADOR
         self.mana = MANA_JUGADOR
-        
-
-
+        #
+        self.colittion_line = 0
     # HUD
     def stat_bar(self,screen,x,y,color,stat):
         widht = 300
@@ -60,16 +59,16 @@ class Player:
         else:
             self.animation = self.stay_frames_l
     #caminar izq-der
-    def walk(self,direccion):
-        if direccion:
+    def walk(self):
+        if self.direction:
             self.direction_movement.x = 1
             self.animation = self.walk_frame_r
-        elif not direccion:
+        elif not self.direction:
             self.direction_movement.x = -1
             self.animation = self.walk_frame_l
     #correr
-    def run(self,direccion):
-        if direccion:
+    def run(self):
+        if self.direction:
             self.direction_movement.x = 1
             self.animation = self.run_frame_r
         else:
@@ -116,18 +115,19 @@ class Player:
             
         if keys[pygame.K_RIGHT]:
             self.direction = True
-            self.walk(self.direction)
+            self.walk()
         
         if keys[pygame.K_LEFT]:
             self.direction = False
-            self.walk(self.direction)
+            self.walk()
         
         if keys[pygame.K_RIGHT] and keys[pygame.K_LSHIFT]: 
             self.direction = True
-            self.run(self.direction)
+            self.run()
 
         if keys[pygame.K_LEFT] and keys[pygame.K_LSHIFT]:
-            self.run(self.direction)
+            self.direction = False
+            self.run()
         
         if keys[pygame.K_z]:
             self.attack()
@@ -142,7 +142,6 @@ class Player:
             self.hp -= 10
             self.mana -= 10
         
-    
     def apply_gravity(self):
         self.direction_movement.y += self.gravity
         self.rect_jugador.y += self.direction_movement.y
@@ -180,13 +179,31 @@ class Player:
         if self.direction_movement.x < 0 and self.rect_jugador.x < RESOLUTION_WIDTH / 3:
             world_move.x = 6
             self.speed_walk = 0
+            self.speed_run = 0
         elif self.direction_movement.x > 0 and self.rect_jugador.x > RESOLUTION_WIDTH - (RESOLUTION_WIDTH / 2):
             world_move.x = -6
             self.speed_walk = 0
+            self.speed_run = 0
+
         else:
             world_move.x = 0
             self.speed_walk = SPEED_WALK
-
+            self.speed_run = SPEED_RUN
+    
+    def player_line_colliders(self,screen,enemy):
+        if self.direction:
+            line_start = self.rect_jugador.center
+            line_end = (line_start[0] + 150, line_start[1])
+            self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
+        else:
+            line_start = self.rect_jugador.center
+            line_end = (line_start[0] - 150, line_start[1])
+            self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
+        
+        if self.colittion_line.colliderect(enemy.rect_enemy):
+            enemy.is_dead = True
+        else:
+            print("b")
     def draw(self,screen):
         if self.frame < len(self.animation):
             self.imagen_jugador = self.animation[self.frame]
@@ -194,8 +211,9 @@ class Player:
             self.frame = 0
 
         screen.blit(self.imagen_jugador,self.rect_jugador)
-        
         self.stat_bar(screen=screen,x=25,y=25,color=G,stat=self.hp)
         self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
+
+        
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_jugador,1)

@@ -6,7 +6,7 @@ from gui_options_menu import Options
 from gui_load_level import LoadLevel
 from mapa import Mapa
 
-pantalla = pygame.display.set_mode((RESOLUTION_WIDTH, RESOLUTION_HEIGHT),pygame.FULLSCREEN)
+pantalla = pygame.display.set_mode((RESOLUTION_WIDTH, RESOLUTION_HEIGHT))
 pygame.display.set_caption("Souls like")
 pygame.init()
 
@@ -29,13 +29,12 @@ while esta_corriendo:
     event_list = pygame.event.get()
     keys = pygame.key.get_pressed()
     for event in event_list: 
-        if event.type == pygame.QUIT or main_menu.button_dict["exit"].is_active:
+        if event.type == pygame.QUIT or main_menu.button_dict["exit"].is_active or keys[pygame.K_ESCAPE]:
             esta_corriendo = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
-
     
-    mapa_1.run(delta_ms=delta_ms)
+    mapa_1.run(delta_ms=delta_ms,keys=keys)
     pygame.display.flip()
     
 pygame.quit()

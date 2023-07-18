@@ -12,22 +12,24 @@ class Mapa:
         self.limits_list = []
         self.enemy_list = []
         self.bonfire_list = []
-        self.background_list = getSurfaceFromSeparateSprite(path=path_fondo,frames=5,flag_flip=False,size=(1980,RESOLUTION_HEIGHT))
+        self.background_list = getSurfaceFromSeparateSprite(path=path_fondo,frames=5,flag_flip=False,size=(1000,RESOLUTION_HEIGHT))
         self.musica_fondo = cargar_musica(path=path_musica,volumen=volumen,repetir=-1)
         self.music_playing = False
         self.screen = screen    
         self.world_move = pygame.math.Vector2()
+        self.speed_background = 0.5
+        self.scroll = 0
         self.setup_map(level_design)
-
+        self.bg_rect = self.background_list[0].get_rect()
     def draw_background(self):
-        for x in range(0,len(self.background_list)):
-            speed = 1
-            for background in self.background_list:
-                self.screen.blit(background,((x*RESOLUTION_HEIGHT) - 6 * speed,0))
-                speed += 0.2
-
-
-
+        bg_width = self.background_list[0].get_width()
+        
+        for x in range(len(self.background_list)):
+            self.speed_background = 1
+            for bg in self.background_list[0:4]:
+                self.screen.blit(bg,((bg_width * x) - self.scroll * self.speed_background ,0))
+                self.speed_background += 0.2
+                
     def setup_map(self,level_map):
 
         for column_index,column in enumerate(level_map):
@@ -88,10 +90,14 @@ class Mapa:
                     player.rect_jugador.bottom = platform.rect.top                
                     player.direction_movement.y = 0
 
-    def run(self,delta_ms):
+    def run(self,delta_ms,keys):
         #fondo
         # self.screen.fill(W)
         self.draw_background()
+        if keys[pygame.K_LEFT] and self.world_move.x > 0:
+            self.scroll -= SPEED_WALK / 2
+        elif keys[pygame.K_RIGHT]and self.world_move.x < 0:
+            self.scroll += SPEED_WALK / 2
         #mundo
         for platform in self.platforms_list:
             platform.update(self.world_move)
@@ -108,11 +114,16 @@ class Mapa:
         for enemy in self.enemy_list:
             enemy.update(self.world_move,self.limits_list,True)
             enemy.draw(self.screen)
+            self.player.player_line_colliders(screen=self.screen,enemy=enemy)
 
         #jugador
         player = self.player
-        self.player.update(delta_ms)
+        player.update(delta_ms)
         self.colliders_player_x(player.direction_movement.x,player.rect_jugador)
-        self.colliders_player_y(self.player)
-        self.player.draw(self.screen)
-        self.player.map_actions(self.world_move)
+        self.colliders_player_y(player)
+        player.draw(self.screen)
+        player.map_actions(self.world_move)
+
+        # self.bg_rect.x += self.world_move.x
+        # for x in range(len(self.background_list)):
+        #     self.screen.blit(self.background_list[-1],((self.background_list[0].get_width()*x) - self.scroll ,0))
