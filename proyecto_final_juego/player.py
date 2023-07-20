@@ -41,6 +41,7 @@ class Player:
         #
         self.hp = VIDA_JUGADOR
         self.mana = MANA_JUGADOR
+        self.score = 0
         #
         self.colittion_line = 0
     # HUD
@@ -191,10 +192,14 @@ class Player:
             self.speed_run = SPEED_RUN
     
     def player_line_colliders(self,screen,enemy):
+        keys = pygame.key.get_pressed()
         if self.direction:
             line_start = self.rect_jugador.center
             line_end = (line_start[0] + 150, line_start[1])
             self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
+            if keys[pygame.K_t]:
+                line_end[0] + 10
+            
         else:
             line_start = self.rect_jugador.center
             line_end = (line_start[0] - 150, line_start[1])
@@ -204,6 +209,7 @@ class Player:
             enemy.is_dead = True
         else:
             print("b")
+        
     def draw(self,screen):
         if self.frame < len(self.animation):
             self.imagen_jugador = self.animation[self.frame]
@@ -214,6 +220,5 @@ class Player:
         self.stat_bar(screen=screen,x=25,y=25,color=G,stat=self.hp)
         self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
 
-        
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_jugador,1)

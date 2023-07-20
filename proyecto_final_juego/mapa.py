@@ -5,7 +5,7 @@ from player import Player
 from enemigo import Enemy
 from plataformas import Plataforma
 from bonfire import Bonfire
-
+from score import Score
 class Mapa:
     def __init__(self,level_design,screen,path_musica,volumen,path_fondo) -> None:
         self.platforms_list = []
@@ -21,6 +21,12 @@ class Mapa:
         self.scroll = 0
         self.setup_map(level_design)
         self.bg_rect = self.background_list[0].get_rect()
+        #
+        self.font = pygame.font.Font(None,15)
+        #
+        self.time = 120
+        self.score = Score(None,"Score",10,20,(RESOLUTION_WIDTH,0))
+
     def draw_background(self):
         bg_width = self.background_list[0].get_width()
         
@@ -112,10 +118,12 @@ class Mapa:
             bonfire.draw()
 
         for enemy in self.enemy_list:
-            enemy.update(self.world_move,self.limits_list,True)
-            enemy.draw(self.screen)
+            if enemy.is_dead:
+                self.enemy_list.remove(enemy)
+            else:
+                enemy.update(self.world_move,self.limits_list,True)
+                enemy.draw(self.screen)
             self.player.player_line_colliders(screen=self.screen,enemy=enemy)
-
         #jugador
         player = self.player
         player.update(delta_ms)
@@ -123,7 +131,7 @@ class Mapa:
         self.colliders_player_y(player)
         player.draw(self.screen)
         player.map_actions(self.world_move)
-
+        self.score.draw(self.screen)
         # self.bg_rect.x += self.world_move.x
         # for x in range(len(self.background_list)):
         #     self.screen.blit(self.background_list[-1],((self.background_list[0].get_width()*x) - self.scroll ,0))

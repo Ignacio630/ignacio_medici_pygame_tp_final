@@ -37,6 +37,9 @@ class Enemy:
                     self.rect_enemy.top = limit.rect.bottom
                     self.direction.y = self.speed
 
+    def kill(self):
+        self.is_dead = True
+
     def update(self,world_speed,limits,movimiento):
         if movimiento:
             self.enemy_movement_x(limits,world_speed)

@@ -4,7 +4,7 @@ from levels import *
 FPS = 60 
 
 #debug
-DEBUG = False
+DEBUG = True
 
 #definimos la direccion de la carpeta con los recursos
 
