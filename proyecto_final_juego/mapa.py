@@ -25,7 +25,7 @@ class Mapa:
         self.font = pygame.font.Font(None,15)
         #
         self.time = 120
-        self.score = Score(None,"Score",10,20,(RESOLUTION_WIDTH,0))
+        self.score = Score(None,"Souls:",10,20,(RESOLUTION_WIDTH-150,0))
 
     def draw_background(self):
         bg_width = self.background_list[0].get_width()
@@ -113,13 +113,16 @@ class Mapa:
             limit.update(self.world_move)
             limit.draw(self.screen)
 
+        self.score.draw(self.screen)
         for bonfire in self.bonfire_list:
             bonfire.update(self.player,self.world_move,delta_ms)
             bonfire.draw()
-
+        print(self.score.score)
         for enemy in self.enemy_list:
             if enemy.is_dead:
                 self.enemy_list.remove(enemy)
+                self.score.add_score()
+                self.score.update()
             else:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
@@ -131,7 +134,6 @@ class Mapa:
         self.colliders_player_y(player)
         player.draw(self.screen)
         player.map_actions(self.world_move)
-        self.score.draw(self.screen)
         # self.bg_rect.x += self.world_move.x
         # for x in range(len(self.background_list)):
         #     self.screen.blit(self.background_list[-1],((self.background_list[0].get_width()*x) - self.scroll ,0))
