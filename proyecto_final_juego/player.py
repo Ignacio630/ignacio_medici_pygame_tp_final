@@ -207,8 +207,6 @@ class Player:
         
         if self.colittion_line.colliderect(enemy.rect_enemy):
             enemy.is_dead = True
-        else:
-            print("b")
         
     def draw(self,screen):
         if self.frame < len(self.animation):

@@ -1,4 +1,5 @@
 import pygame 
+import time 
 from config import *
 from funciones_utiles import *
 from player import Player
@@ -6,6 +7,9 @@ from enemigo import Enemy
 from plataformas import Plataforma
 from bonfire import Bonfire
 from score import Score
+
+
+
 class Mapa:
     def __init__(self,level_design,screen,path_musica,volumen,path_fondo) -> None:
         self.platforms_list = []
@@ -24,9 +28,26 @@ class Mapa:
         #
         self.font = pygame.font.Font(None,15)
         #
-        self.time = 120
-        self.score = Score(None,"Souls:",10,20,(RESOLUTION_WIDTH-150,0))
+        self.start_time = time.time()
+        self.time = 0
+        self.score = Score("Souls:",(RESOLUTION_WIDTH-125,0),(200,60))
+        self.font_time = pygame.font.Font(None, 30)
+        self.time_surface = self.font_time.render("Time: " + self.formatted_time(), True, B)
+        self.time_rect = self.time_surface.get_rect(topright=(RESOLUTION_WIDTH - 10, 30))
+        #
+    
+    def update_time(self):
+        current_time = time.time()
+        self.time = current_time - self.start_time
+        
 
+    def formatted_time(self):
+        min = int(self.time // 60)
+        seg = int(self.time % 60)
+        return "{0:02}:{1:02}".format(min,seg)
+    def draw_time(self):
+        self.update_time()
+        self.screen.blit(self.time_surface, self.time_rect)
     def draw_background(self):
         bg_width = self.background_list[0].get_width()
         
@@ -76,7 +97,6 @@ class Mapa:
                     player_rect.right = platform.rect.left
                     direction_movement_x = 0
 
-    
     def music_is_playing(self,volumen):
         if volumen == 0:
             self.music_playing = False
@@ -98,8 +118,8 @@ class Mapa:
 
     def run(self,delta_ms,keys):
         #fondo
-        # self.screen.fill(W)
         self.draw_background()
+
         if keys[pygame.K_LEFT] and self.world_move.x > 0:
             self.scroll -= SPEED_WALK / 2
         elif keys[pygame.K_RIGHT]and self.world_move.x < 0:
@@ -113,27 +133,27 @@ class Mapa:
             limit.update(self.world_move)
             limit.draw(self.screen)
 
-        self.score.draw(self.screen)
         for bonfire in self.bonfire_list:
             bonfire.update(self.player,self.world_move,delta_ms)
             bonfire.draw()
-        print(self.score.score)
         for enemy in self.enemy_list:
             if enemy.is_dead:
                 self.enemy_list.remove(enemy)
-                self.score.add_score()
-                self.score.update()
+                self.score.add_score(10)
             else:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
             self.player.player_line_colliders(screen=self.screen,enemy=enemy)
+
         #jugador
+        self.score.draw(self.screen)
         player = self.player
         player.update(delta_ms)
+
         self.colliders_player_x(player.direction_movement.x,player.rect_jugador)
         self.colliders_player_y(player)
+
         player.draw(self.screen)
         player.map_actions(self.world_move)
-        # self.bg_rect.x += self.world_move.x
-        # for x in range(len(self.background_list)):
-        #     self.screen.blit(self.background_list[-1],((self.background_list[0].get_width()*x) - self.scroll ,0))
+
+        self.draw_time()
