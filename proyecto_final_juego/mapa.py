@@ -30,17 +30,16 @@ class Mapa:
         #
         self.start_time = time.time()
         self.time = 0
-        self.score = Score("Souls:",(RESOLUTION_WIDTH-125,0),(200,60))
+        self.score = Score("Souls:",(RESOLUTION_WIDTH-125,0),(260,50))
         self.font_time = pygame.font.Font(None, 30)
-        self.time_surface = self.font_time.render("Time: " + self.formatted_time(), True, B)
+        self.time_surface = self.font_time.render("Time: " + self.formatted_time(), True, W)
         self.time_rect = self.time_surface.get_rect(topright=(RESOLUTION_WIDTH - 10, 30))
         #
     
     def update_time(self):
         current_time = time.time()
         self.time = current_time - self.start_time
-        
-
+    
     def formatted_time(self):
         min = int(self.time // 60)
         seg = int(self.time % 60)
@@ -48,6 +47,7 @@ class Mapa:
     def draw_time(self):
         self.update_time()
         self.screen.blit(self.time_surface, self.time_rect)
+
     def draw_background(self):
         bg_width = self.background_list[0].get_width()
         
@@ -119,7 +119,6 @@ class Mapa:
     def run(self,delta_ms,keys):
         #fondo
         self.draw_background()
-
         if keys[pygame.K_LEFT] and self.world_move.x > 0:
             self.scroll -= SPEED_WALK / 2
         elif keys[pygame.K_RIGHT]and self.world_move.x < 0:
@@ -143,7 +142,7 @@ class Mapa:
             else:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
-            self.player.player_line_colliders(screen=self.screen,enemy=enemy)
+            # self.player.player_line_colliders(screen=self.screen,enemy=enemy)
 
         #jugador
         self.score.draw(self.screen)
@@ -156,4 +155,8 @@ class Mapa:
         player.draw(self.screen)
         player.map_actions(self.world_move)
 
+        self.time_surface = self.font_time.render("Time: " + self.formatted_time(), True, W)
+        self.time_rect = self.time_surface.get_rect(topright=(RESOLUTION_WIDTH - 10, 30))
+
+        # Dibujar el tiempo en la pantalla
         self.draw_time()

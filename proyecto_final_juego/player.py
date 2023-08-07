@@ -23,6 +23,7 @@ class Player:
 
         self.frame = 0
         self.animation = self.stay_frames_r
+        self.size_player = size
         self.imagen_jugador = self.animation[self.frame]
         self.rect_jugador = self.imagen_jugador.get_rect(topleft = pos)
 
@@ -33,7 +34,7 @@ class Player:
         self.jump_power = jump_power
         self.jump_height = jump_height
         self.start_jump = 0
-        self.is_attacking = False
+        self.attack_type = 0
         self.is_jumping = False
         self.is_shooting = False
         self.gravity = gravity
@@ -83,15 +84,20 @@ class Player:
             self.frame = 0
             self.is_jumping = True
     #ataque
-    def attack(self):
-        if not self.is_attacking:
+    def collider_attack(self,surface):
+        attacking_rect = pygame.Rect(self.rect_jugador.centerx,self.rect_jugador.y,100,100)
+        pygame.draw.rect(surface=surface,color=R,rect=attacking_rect)
+
+    def attack(self,surface):
+        if self.attack_type == 0:
             if self.direction:
                 self.animation = self.attack_frame_r
             else:
                 self.animation = self.attack_frame_l
-            self.is_attacking = True  
+            self.attack_type = 1
+            self.collider_attack(surface=surface)  
         else:
-            self.is_attacking = False    
+            self.attack_type = 0    
     #disparo
     def shoot(self):
         if self.is_shooting and self.mana > 0:
@@ -106,7 +112,7 @@ class Player:
             self.hability_fireball.speed = 0
             print(f"tenes{self.mana}, se necesita 10 de mana para lanzar")
 
-    def inputs(self):
+    def inputs(self,surface):
         keys = pygame.key.get_pressed()
         self.stay()
         self.direction_movement.x = 0
@@ -131,7 +137,7 @@ class Player:
             self.run()
         
         if keys[pygame.K_z]:
-            self.attack()
+            self.attack(surface)
         
         if keys[pygame.K_x]:
             self.is_shooting = True
@@ -148,7 +154,7 @@ class Player:
         self.rect_jugador.y += self.direction_movement.y
         
     def update(self,delta_ms): 
-        self.inputs()
+        
         #Aplicar animacion
         self.tiempo_transcurrido += delta_ms    
         if (self.tiempo_transcurrido >= 200):
@@ -191,24 +197,25 @@ class Player:
             self.speed_walk = SPEED_WALK
             self.speed_run = SPEED_RUN
     
-    def player_line_colliders(self,screen,enemy):
-        keys = pygame.key.get_pressed()
-        if self.direction:
-            line_start = self.rect_jugador.center
-            line_end = (line_start[0] + 150, line_start[1])
-            self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
-            if keys[pygame.K_t]:
-                line_end[0] + 10
+    # def player_line_colliders(self,screen,enemy):
+    #     keys = pygame.key.get_pressed()
+    #     if self.direction:
+    #         line_start = self.rect_jugador.center
+    #         line_end = (line_start[0] + 150, line_start[1])
+    #         self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
+    #         if keys[pygame.K_t]:
+    #             line_end[0] + 10
             
-        else:
-            line_start = self.rect_jugador.center
-            line_end = (line_start[0] - 150, line_start[1])
-            self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
+    #     else:
+    #         line_start = self.rect_jugador.center
+    #         line_end = (line_start[0] - 150, line_start[1])
+    #         self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
         
-        if self.colittion_line.colliderect(enemy.rect_enemy):
-            enemy.is_dead = True
+    #     if self.colittion_line.colliderect(enemy.rect_enemy):
+    #         enemy.is_dead = True
         
     def draw(self,screen):
+        self.inputs(screen)
         if self.frame < len(self.animation):
             self.imagen_jugador = self.animation[self.frame]
         else:
