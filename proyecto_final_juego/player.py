@@ -19,13 +19,12 @@ class Player:
         
         self.hability_fireball = Fireball(path="{0}{1}".format(path,PATH_FIREBALL),pos=pos,size=(50,25),frame=7)
 
-
-
         self.frame = 0
         self.animation = self.stay_frames_r
         self.size_player = size
         self.imagen_jugador = self.animation[self.frame]
         self.rect_jugador = self.imagen_jugador.get_rect(topleft = pos)
+        self.rect_melee_attack = pygame.Rect(0,0,0,0)
 
         self.direction = DIRECCION
         self.direction_movement = pygame.math.Vector2()
@@ -85,9 +84,9 @@ class Player:
             self.is_jumping = True
     #ataque
     def collider_attack(self,surface):
-        attacking_rect = pygame.Rect(self.rect_jugador.centerx,self.rect_jugador.y,100,100)
-        pygame.draw.rect(surface=surface,color=R,rect=attacking_rect)
-
+        attacking_rect = pygame.Rect(self.rect_jugador.right,self.rect_jugador.y,self.size_player[0],self.size_player[1])
+        self.rect_melee_attack = pygame.draw.rect(surface=surface,color=R,rect=attacking_rect)
+        print(self.rect_melee_attack)
     def attack(self,surface):
         if self.attack_type == 0:
             if self.direction:
@@ -213,7 +212,12 @@ class Player:
         
     #     if self.colittion_line.colliderect(enemy.rect_enemy):
     #         enemy.is_dead = True
-        
+    
+    def player_attack_collider(self,enemy):
+        if self.rect_melee_attack.colliderect(enemy.rect_enemy):
+            enemy.is_dead = True
+
+
     def draw(self,screen):
         self.inputs(screen)
         if self.frame < len(self.animation):

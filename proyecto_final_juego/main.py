@@ -35,6 +35,6 @@ while esta_corriendo:
             print(event.pos)
 
     mapa_1.run(delta_ms=delta_ms,keys=keys)
-    pygame.display.flip()
+    pygame.display.update()
     
 pygame.quit()

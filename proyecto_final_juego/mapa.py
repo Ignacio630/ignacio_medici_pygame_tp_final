@@ -142,7 +142,7 @@ class Mapa:
             else:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
-            # self.player.player_line_colliders(screen=self.screen,enemy=enemy)
+            self.player.player_attack_collider(enemy=enemy)
 
         #jugador
         self.score.draw(self.screen)
