@@ -43,9 +43,9 @@ class Player:
             self.animation = self.attack_frame_r
             self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
         else:
-            x, y = self.rect_jugador.topleft
+            x, y = self.rect_jugador.x,self.rect_jugador.y
             self.animation = self.attack_frame_l
-            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x,y,-ANCHO_JUGADOR/2,ALTO_JUGADOR))
+            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x-(ANCHO_JUGADOR/2),y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
             
 
     # HUD
@@ -116,10 +116,8 @@ class Player:
             self.mana -= 10
         
         if keys[pygame.K_z]:
-            self.direction = True
             self.melee_attack(surface)
         if keys[pygame.K_z]:
-            self.direction = False
             self.melee_attack(surface)
         
     def apply_gravity(self):
@@ -138,7 +136,7 @@ class Player:
                 self.frame = 0
         
         self.rect_jugador.x += self.direction_movement.x * self.speed_walk
-
+        print(self.direction)
         print(self.rect_melee_attack)
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
