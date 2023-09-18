@@ -11,20 +11,15 @@ class Player:
         self.walk_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_WALK),6,True,size)
         self.run_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,False,size)
         self.run_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,True,size)
-        self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),5,False,size)
-        self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),5,True,size)
-
-        self.shoot_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,True,size)
-        self.shoot_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_SHOOT),7,False,size)
-        
-        self.hability_fireball = Fireball(path="{0}{1}".format(path,PATH_FIREBALL),pos=pos,size=(50,25),frame=7)
+        self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),5,False,(ALTO_JUGADOR,ANCHO_JUGADOR*1.50))
+        self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),5,True,(ALTO_JUGADOR,ANCHO_JUGADOR*1.50))
 
         self.frame = 0
         self.animation = self.stay_frames_r
         self.size_player = size
         self.imagen_jugador = self.animation[self.frame]
         self.rect_jugador = self.imagen_jugador.get_rect(topleft = pos)
-        self.rect_melee_attack = pygame.Rect(0,0,0,0)
+        self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
 
         self.direction = DIRECCION
         self.direction_movement = pygame.math.Vector2()
@@ -33,17 +28,26 @@ class Player:
         self.jump_power = jump_power
         self.jump_height = jump_height
         self.start_jump = 0
-        self.attack_type = 0
         self.is_jumping = False
-        self.is_shooting = False
         self.gravity = gravity
         self.tiempo_transcurrido = 0
         #
         self.hp = VIDA_JUGADOR
         self.mana = MANA_JUGADOR
         self.score = 0
-        #
-        self.colittion_line = 0
+
+    
+    def melee_attack(self,pantalla):    
+        if self.direction:
+            x, y = self.rect_jugador.topright
+            self.animation = self.attack_frame_r
+            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
+        else:
+            x, y = self.rect_jugador.topleft
+            self.animation = self.attack_frame_l
+            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x,y,-ANCHO_JUGADOR/2,ALTO_JUGADOR))
+            
+
     # HUD
     def stat_bar(self,screen,x,y,color,stat):
         widht = 300
@@ -82,34 +86,6 @@ class Player:
             self.direction_movement.y = self.jump_power
             self.frame = 0
             self.is_jumping = True
-    #ataque
-    def collider_attack(self,surface):
-        attacking_rect = pygame.Rect(self.rect_jugador.right,self.rect_jugador.y,self.size_player[0],self.size_player[1])
-        self.rect_melee_attack = pygame.draw.rect(surface=surface,color=R,rect=attacking_rect)
-        print(self.rect_melee_attack)
-    def attack(self,surface):
-        if self.attack_type == 0:
-            if self.direction:
-                self.animation = self.attack_frame_r
-            else:
-                self.animation = self.attack_frame_l
-            self.attack_type = 1
-            self.collider_attack(surface=surface)  
-        else:
-            self.attack_type = 0    
-    #disparo
-    def shoot(self):
-        if self.is_shooting and self.mana > 0:
-            self.mana -= 10
-            if self.direction:
-                self.animation = self.shoot_frame_r
-                self.hability_fireball.speed += 10
-            else:
-                self.animation = self.shoot_frame_l
-                self.hability_fireball.speed -= 10
-        else:
-            self.hability_fireball.speed = 0
-            print(f"tenes{self.mana}, se necesita 10 de mana para lanzar")
 
     def inputs(self,surface):
         keys = pygame.key.get_pressed()
@@ -135,18 +111,16 @@ class Player:
             self.direction = False
             self.run()
         
-        if keys[pygame.K_z]:
-            self.attack(surface)
-        
-        if keys[pygame.K_x]:
-            self.is_shooting = True
-            self.shoot()
-        else:
-            self.is_shooting = False
-        
         if keys[pygame.K_0]:
             self.hp -= 10
             self.mana -= 10
+        
+        if keys[pygame.K_z]:
+            self.direction = True
+            self.melee_attack(surface)
+        if keys[pygame.K_z]:
+            self.direction = False
+            self.melee_attack(surface)
         
     def apply_gravity(self):
         self.direction_movement.y += self.gravity
@@ -165,7 +139,7 @@ class Player:
         
         self.rect_jugador.x += self.direction_movement.x * self.speed_walk
 
-
+        print(self.rect_melee_attack)
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
                 self.mana += 1
@@ -195,27 +169,7 @@ class Player:
             world_move.x = 0
             self.speed_walk = SPEED_WALK
             self.speed_run = SPEED_RUN
-    
-    # def player_line_colliders(self,screen,enemy):
-    #     keys = pygame.key.get_pressed()
-    #     if self.direction:
-    #         line_start = self.rect_jugador.center
-    #         line_end = (line_start[0] + 150, line_start[1])
-    #         self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
-    #         if keys[pygame.K_t]:
-    #             line_end[0] + 10
-            
-    #     else:
-    #         line_start = self.rect_jugador.center
-    #         line_end = (line_start[0] - 150, line_start[1])
-    #         self.colittion_line = pygame.draw.line(screen,R,line_start,line_end,2)
-        
-    #     if self.colittion_line.colliderect(enemy.rect_enemy):
-    #         enemy.is_dead = True
-    
-    def player_attack_collider(self,enemy):
-        if self.rect_melee_attack.colliderect(enemy.rect_enemy):
-            enemy.is_dead = True
+
 
 
     def draw(self,screen):

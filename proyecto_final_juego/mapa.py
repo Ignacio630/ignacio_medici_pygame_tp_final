@@ -79,7 +79,7 @@ class Mapa:
                     plataforma = Plataforma((x,y),platform_size,path="{0}".format(PATH_PLATAFORMA),flag=True,frame=15)
                     self.limits_list.append(plataforma)
                 if row == "P":
-                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-16,jump_height=200,gravity=0.8,size=(50,90),pos=(x,y))
+                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-16,jump_height=200,gravity=0.8,size=(ANCHO_JUGADOR,ALTO_JUGADOR),pos=(x,y))
                 if row == "E":
                     enemy = Enemy(platform_size,(x,y))
                     self.enemy_list.append(enemy)
@@ -116,6 +116,17 @@ class Mapa:
                     player.rect_jugador.bottom = platform.rect.top                
                     player.direction_movement.y = 0
 
+    def update_enemy(self):
+        for enemy in self.enemy_list:
+            if enemy.is_dead:
+                self.enemy_list.remove(enemy)
+                self.score.add_score(10)
+            else:
+                enemy.update(self.world_move,self.limits_list,True)
+                enemy.draw(self.screen)
+                if enemy.rect_enemy.colliderect(self.player.rect_melee_attack):
+                    enemy.is_dead = True
+
     def run(self,delta_ms,keys):
         #fondo
         self.draw_background()
@@ -135,14 +146,8 @@ class Mapa:
         for bonfire in self.bonfire_list:
             bonfire.update(self.player,self.world_move,delta_ms)
             bonfire.draw()
-        for enemy in self.enemy_list:
-            if enemy.is_dead:
-                self.enemy_list.remove(enemy)
-                self.score.add_score(10)
-            else:
-                enemy.update(self.world_move,self.limits_list,True)
-                enemy.draw(self.screen)
-            self.player.player_attack_collider(enemy=enemy)
+
+        self.update_enemy()
 
         #jugador
         self.score.draw(self.screen)

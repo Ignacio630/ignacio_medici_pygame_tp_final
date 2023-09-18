@@ -8,7 +8,7 @@ DEBUG = True
 
 #definimos la direccion de la carpeta con los recursos
 
-PATH_RECURSOS = "recursos"
+PATH_RECURSOS = "proyecto_final_juego/recursos"
 PATH_MENU = "{0}/menu/".format(PATH_RECURSOS)
 PATH_SPRITES = "{0}/sprites/".format(PATH_RECURSOS)
 PATH_ENEMIGO = "{0}enemigo/".format(PATH_SPRITES)
@@ -51,9 +51,9 @@ platform_size = 52
 VIDA_JUGADOR = 100
 MANA_JUGADOR = 100
 
-ANCHO_JUGADOR = 0
-ALTO_JUGADOR = 0
+ANCHO_JUGADOR = 50
+ALTO_JUGADOR = 90
 
 SPEED_WALK = 4
-SPEED_RUN = SPEED_WALK * 1.80 
+SPEED_RUN = 6
 

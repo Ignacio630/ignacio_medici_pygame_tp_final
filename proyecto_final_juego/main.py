@@ -33,7 +33,7 @@ while esta_corriendo:
             esta_corriendo = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
-
+    
     mapa_1.run(delta_ms=delta_ms,keys=keys)
     pygame.display.update()
     
