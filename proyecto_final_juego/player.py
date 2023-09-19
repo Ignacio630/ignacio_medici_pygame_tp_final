@@ -11,8 +11,8 @@ class Player:
         self.walk_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_WALK),6,True,size)
         self.run_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,False,size)
         self.run_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,True,size)
-        self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),2,False,(ANCHO_JUGADOR*1.5,ALTO_JUGADOR))
-        self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),2,True,(ANCHO_JUGADOR*1.5,ALTO_JUGADOR))
+        self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),4,False,(ANCHO_JUGADOR,ALTO_JUGADOR))
+        self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),4,True,(ANCHO_JUGADOR,ALTO_JUGADOR))
 
         self.frame = 0
         self.animation = self.stay_frames_r
