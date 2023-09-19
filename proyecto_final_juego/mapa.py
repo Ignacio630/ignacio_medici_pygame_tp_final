@@ -127,6 +127,10 @@ class Mapa:
                 if enemy.rect_enemy.colliderect(self.player.rect_melee_attack):
                     enemy.is_dead = True
 
+    def player_collition_line(self, ):
+        
+        
+
     def run(self,delta_ms,keys):
         #fondo
         self.draw_background()

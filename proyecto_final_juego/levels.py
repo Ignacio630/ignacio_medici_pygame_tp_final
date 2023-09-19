@@ -1,17 +1,17 @@
 from config import *
 level_map_1 = [
     'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
-    'C                                                                  C',
-    'C                                                                  C',
-    'C                                                                  C',
-    'C                                                                  C',
-    'C                                       L    E   L                 C',
-    'C                                        CCCCCCCC                  C',
-    'C                            L    E    L                           C',
-    'C                            CCCCCCCCCC                            C',
-    'C               CCC                                                C',
-    'C               CCC                                                C',
-    'C    P    F     CCC                            L     E      L      C',
+    'L                                                                  L',
+    'L                                                                  L',
+    'L                                                                  L',
+    'L                                                                  L',
+    'L                                       L    E   L                 L',
+    'L                                        CCCCCCCC                  L',
+    'L                            L    E    L                           L',
+    'L                            CCCCCCCCCC                            L',
+    'L               CCC                                                L',
+    'L               CCC                                                L',
+    'L    P    F     CCC                            L     E      L      L',
     'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD'
 ]
 
@@ -24,7 +24,7 @@ level_map_2 = [
     'CCCCCCCCCC                                            L     E      L        C',
     'CCCCCCCCCC                                             CCCCCCCCCCCC         C',
     'CCCCCCCCCC                            L    E    L                           C',
-    'CCCCCCCCCC                            CCCCCCCCCC                            C',
+    'CCCCCCCCCC                             CCCCCCCCC                            C',
     'CCCCCCCCCC                                                                  C',
     'CCCCCCCCCC                                                                  C',
     'CCCCCCCCCC    P                                                             C',

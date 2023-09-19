@@ -20,6 +20,7 @@ class Player:
         self.imagen_jugador = self.animation[self.frame]
         self.rect_jugador = self.imagen_jugador.get_rect(topleft = pos)
         self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
+        self.rect_collition = pygame.rect.Rect(0,0,0,0)
 
         self.direction = DIRECCION
         self.direction_movement = pygame.math.Vector2()
@@ -43,10 +44,18 @@ class Player:
             self.animation = self.attack_frame_r
             self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
         else:
-            x, y = self.rect_jugador.x,self.rect_jugador.y
+            x, y = self.rect_jugador.topright
             self.animation = self.attack_frame_l
-            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x-(ANCHO_JUGADOR/2),y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
+            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=R,rect=(x-ANCHO_JUGADOR,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
             
+    def collition_line(self,surface,ancho):
+        if self.direction:
+            x, y = self.rect_jugador.center
+            self.rect_collition = pygame.draw.rect(surface=surface,color=R,rect=(x,y,ancho,0))
+        else:
+            x, y = self.rect_jugador.center
+            self.rect_collition = pygame.draw.rect(surface=surface,color=R,rect=(x,y,ancho,0))
+
 
     # HUD
     def stat_bar(self,screen,x,y,color,stat):
@@ -124,8 +133,7 @@ class Player:
         self.direction_movement.y += self.gravity
         self.rect_jugador.y += self.direction_movement.y
         
-    def update(self,delta_ms): 
-        
+    def update(self,delta_ms):         
         #Aplicar animacion
         self.tiempo_transcurrido += delta_ms    
         if (self.tiempo_transcurrido >= 200):
@@ -134,12 +142,14 @@ class Player:
                 self.frame += 1
             else:
                 self.frame = 0
-        
+                
+        self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
         self.rect_jugador.x += self.direction_movement.x * self.speed_walk
-        print(self.animation)
+        
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
                 self.mana += 1
+
         #Salto
         if (self.start_jump - self.rect_jugador.bottom) == self.jump_height:
             self.direction_movement.y = 0
@@ -151,7 +161,7 @@ class Player:
             self.hp = 0
         if self.mana < 0:
             self.mana = 0
-    
+
     def map_actions(self, world_move):
         if self.direction_movement.x < 0 and self.rect_jugador.x < RESOLUTION_WIDTH / 3:
             world_move.x = 6
@@ -177,8 +187,10 @@ class Player:
             self.frame = 0
 
         screen.blit(self.imagen_jugador,self.rect_jugador)
+
         self.stat_bar(screen=screen,x=25,y=25,color=G,stat=self.hp)
         self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
 
+        self.colisiones(surface=screen)
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_jugador,1)
