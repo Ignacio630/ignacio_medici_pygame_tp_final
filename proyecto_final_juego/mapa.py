@@ -128,7 +128,7 @@ class Mapa:
                     enemy.is_dead = True
 
     def player_collition_line(self, ):
-        
+        pass
         
 
     def run(self,delta_ms,keys):
