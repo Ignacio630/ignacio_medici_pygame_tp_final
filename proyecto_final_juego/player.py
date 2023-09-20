@@ -11,8 +11,8 @@ class Player:
         self.walk_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_WALK),6,True,size)
         self.run_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,False,size)
         self.run_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,True,size)
-        self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),4,False,(ANCHO_JUGADOR,ALTO_JUGADOR))
-        self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),4,True,(ANCHO_JUGADOR,ALTO_JUGADOR))
+        self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),2,False,(ANCHO_JUGADOR*1.5,ALTO_JUGADOR))
+        self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),2,True,(ANCHO_JUGADOR*1.5,ALTO_JUGADOR))
 
         self.frame = 0
         self.animation = self.stay_frames_r
@@ -44,9 +44,9 @@ class Player:
             self.animation = self.attack_frame_r
             self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=T,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
         else:
-            x, y = self.rect_jugador.topright
+            x, y = self.rect_jugador.topleft
             self.animation = self.attack_frame_l
-            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=T,rect=(x-ANCHO_JUGADOR,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
+            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=T,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
           
     def collition_line(self,surface,ancho):
         if self.direction:
@@ -187,5 +187,6 @@ class Player:
         self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
 
         self.collition_line(surface=screen,ancho=100)
+
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_jugador,1)
