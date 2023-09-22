@@ -3,6 +3,7 @@ from config import *
 from levels import *
 from funciones_utiles import *
 from fireball import Fireball
+
 class Player:
     def __init__(self,path,speed_walk,speed_run,jump_power,jump_height,gravity,size,pos) -> None:
         self.stay_frames_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,False,size)
@@ -20,6 +21,7 @@ class Player:
         self.imagen_jugador = self.animation[self.frame]
         self.rect_jugador = self.imagen_jugador.get_rect(topright = pos)
 
+        self.fireball = Fireball("{0}{1}".format(path,PATH_FIREBALL),self.rect_jugador.topleft,(50,25),7)
         self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
         self.rect_collition = pygame.rect.Rect(0,0,0,0)
 
@@ -55,6 +57,12 @@ class Player:
         else:
             x, y = self.rect_jugador.center
             self.rect_collition = pygame.draw.rect(surface=surface,color=R,rect=(x,y,ancho,0))
+
+    def range_attack(self,screen):
+        if self.direction:
+            pass
+        else:
+            pass   
     # HUD
     def stat_bar(self,screen,x,y,color,stat):
         widht = 300
@@ -122,6 +130,10 @@ class Player:
             self.hp -= 10
             self.mana -= 10
         
+        if keys[pygame.K_x]:
+            self.mana = 10
+            self.fireball.fire(10)
+
         if keys[pygame.K_z]:
             self.melee_attack(surface)
         if keys[pygame.K_z]:
@@ -140,8 +152,7 @@ class Player:
                 self.frame += 1
             else:
                 self.frame = 0
-                
-        self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
+        print(self.rect_jugador.center)
         self.rect_jugador.x += self.direction_movement.x * self.speed_walk
         if (self.tiempo_transcurrido >= 500):
             while(self.mana == 100):
@@ -174,6 +185,8 @@ class Player:
             self.speed_walk = SPEED_WALK
             self.speed_run = SPEED_RUN
 
+        self.fireball.update(world_move)
+
     def draw(self,screen):
         self.inputs(screen)
         if self.frame < len(self.animation):
@@ -182,6 +195,8 @@ class Player:
             self.frame = 0
 
         screen.blit(self.imagen_jugador,self.rect_jugador)
+        
+        self.fireball.draw(screen)
 
         self.stat_bar(screen=screen,x=25,y=25,color=G,stat=self.hp)
         self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
