@@ -20,7 +20,7 @@ load_level = LoadLevel(name="load_level", main_screen=pantalla, x=RESOLUTION_WID
 mapa_1 = Mapa(level_map_1, pantalla, "{0}fondo/level_1_music.mp3".format(PATH_MUSICA), volumen=0.05,path_fondo="{0}background/".format(PATH_FONDO))
 mapa_2 = Mapa(level_map_2, pantalla, "{0}fondo/level_1_music.mp3".format(PATH_MUSICA), volumen=0.05,path_fondo="{0}background/".format(PATH_FONDO))
 mapa_3 = Mapa(level_map_3, pantalla, "{0}fondo/level_1_music.mp3".format(PATH_MUSICA), volumen=0.05,path_fondo="{0}background/".format(PATH_FONDO))
-
+   
 menu_actual = main_menu
 
 # bucle principal

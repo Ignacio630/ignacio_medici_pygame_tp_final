@@ -5,7 +5,7 @@ from funciones_utiles import *
 from fireball import Fireball
 
 class Player:
-    def __init__(self,path,speed_walk,speed_run,jump_power,jump_height,gravity,size,pos) -> None:
+    def __init__(self,path,speed_walk,speed_run,jump_power,jump_height,gravity,size,pos,screen) -> None:
         self.stay_frames_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,False,size)
         self.stay_frames_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,True,size)
         self.walk_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_WALK),6,False,size)
@@ -14,17 +14,18 @@ class Player:
         self.run_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_RUN),8,True,size)
         self.attack_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),2,False,(ANCHO_JUGADOR*1.5,ALTO_JUGADOR))
         self.attack_frame_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_ATTACK),2,True,(ANCHO_JUGADOR*1.5,ALTO_JUGADOR))
-
+        #
+        self.screen = screen
         self.frame = 0
         self.animation = self.stay_frames_r
         self.size_player = size
         self.imagen_jugador = self.animation[self.frame]
         self.rect_jugador = self.imagen_jugador.get_rect(topright = pos)
-
-        self.fireball = Fireball("{0}{1}".format(path,PATH_FIREBALL),self.rect_jugador.topleft,(50,25),7)
+        #
+        self.fireballs = []
         self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
         self.rect_collition = pygame.rect.Rect(0,0,0,0)
-
+        #
         self.direction = DIRECCION
         self.direction_movement = pygame.math.Vector2()
         self.speed_walk = speed_walk
@@ -32,7 +33,10 @@ class Player:
         self.jump_power = jump_power
         self.jump_height = jump_height
         self.start_jump = 0
+        #
         self.is_jumping = False
+        self.is_attacking = False
+        self.is_shooting = False
         self.gravity = gravity
         self.tiempo_transcurrido = 0
         #
@@ -50,19 +54,23 @@ class Player:
             self.animation = self.attack_frame_l
             self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=T,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
           
-    def collition_line(self,surface,ancho):
-        if self.direction:
-            x, y = self.rect_jugador.center
-            self.rect_collition = pygame.draw.rect(surface=surface,color=R,rect=(x,y,ancho,0))
-        else:
-            x, y = self.rect_jugador.center
-            self.rect_collition = pygame.draw.rect(surface=surface,color=R,rect=(x,y,ancho,0))
+    def collition_line(self):
+        pass
 
-    def range_attack(self,screen):
-        if self.direction:
-            pass
+    def range_attack(self):
+        if self.mana >= 10:
+            if self.direction:
+                self.mana -= 10
+                self.fireballs.append(Fireball("{0}{1}".format(PATH_JUGADOR,PATH_FIREBALL),self.rect_jugador.midleft,(50,25),7,self.direction))
+                for fireball in self.fireballs:
+                    fireball.fire(10) 
+            else:
+                self.mana -= 10
+                self.fireballs.append(Fireball("{0}{1}".format(PATH_JUGADOR,PATH_FIREBALL),self.rect_jugador.midleft,(50,25),7,self.direction))
+                for fireball in self.fireballs:
+                    fireball.fire(-10)  
         else:
-            pass   
+            print("mana insuficiente")
     # HUD
     def stat_bar(self,screen,x,y,color,stat):
         widht = 300
@@ -96,19 +104,18 @@ class Player:
             self.animation = self.run_frame_l
     #saltar
     def jump(self):
-        if not self.is_jumping :
-            self.start_jump = self.rect_jugador.bottom
-            self.direction_movement.y = self.jump_power
-            self.frame = 0
-            self.is_jumping = True
+        self.direction_movement.y = self.jump_power
+        self.is_jumping = True
 
-    def inputs(self,surface):
+    def inputs(self):
         keys = pygame.key.get_pressed()
         self.stay()
         self.direction_movement.x = 0
         
-        if keys[pygame.K_SPACE] and not self.is_jumping:
-            self.jump()     
+        if keys[pygame.K_SPACE] == 1 and not self.is_jumping:
+            self.jump()
+        if keys[pygame.K_SPACE] == 0 and self.is_jumping:
+            self.is_jumping = False
             
         if keys[pygame.K_RIGHT]:
             self.direction = True
@@ -126,18 +133,19 @@ class Player:
             self.direction = False
             self.run()
         
-        if keys[pygame.K_0]:
-            self.hp -= 10
-            self.mana -= 10
-        
-        if keys[pygame.K_x]:
-            self.mana = 10
-            self.fireball.fire(10)
+        #Shoot attack
+        if keys[pygame.K_x] == 1 and not self.is_shooting:
+            self.range_attack()
+            self.is_shooting = True
+        if keys[pygame.K_x] == 0 and self.is_shooting:
+            self.is_shooting = False
 
-        if keys[pygame.K_z]:
-            self.melee_attack(surface)
-        if keys[pygame.K_z]:
-            self.melee_attack(surface)
+        #Melee attack
+        if keys[pygame.K_z] == 1 and not self.is_attacking:
+            self.melee_attack(self.screen)
+            self.is_attacking = True
+        if keys[pygame.K_z] == 0 and self.is_attacking:
+            self.is_attacking = False
         
     def apply_gravity(self):
         self.direction_movement.y += self.gravity
@@ -145,30 +153,18 @@ class Player:
         
     def update(self,delta_ms):         
         #Aplicar animacion
-        self.tiempo_transcurrido += delta_ms    
+        self.inputs()
+        self.tiempo_transcurrido += delta_ms
         if (self.tiempo_transcurrido >= 200):
             self.tiempo_transcurrido = 0
             if(self.frame < len(self.animation)-1):
                 self.frame += 1
             else:
                 self.frame = 0
-        print(self.rect_jugador.center)
         self.rect_jugador.x += self.direction_movement.x * self.speed_walk
-        if (self.tiempo_transcurrido >= 500):
-            while(self.mana == 100):
-                self.mana += 1
-
-        #Salto
-        if (self.start_jump - self.rect_jugador.bottom) == self.jump_height:
-            self.direction_movement.y = 0
         
-        if self.start_jump == self.rect_jugador.bottom:
-            self.is_jumping = False
-            
-        if self.hp < 0:
-            self.hp = 0
-        if self.mana < 0:
-            self.mana = 0
+        
+
 
     def map_actions(self, world_move):
         if self.direction_movement.x < 0 and self.rect_jugador.x < RESOLUTION_WIDTH / 3:
@@ -179,29 +175,22 @@ class Player:
             world_move.x = -6
             self.speed_walk = 0
             self.speed_run = 0
-
         else:
             world_move.x = 0
             self.speed_walk = SPEED_WALK
             self.speed_run = SPEED_RUN
 
-        self.fireball.update(world_move)
-
-    def draw(self,screen):
-        self.inputs(screen)
+    def draw(self):
         if self.frame < len(self.animation):
             self.imagen_jugador = self.animation[self.frame]
         else:
             self.frame = 0
 
-        screen.blit(self.imagen_jugador,self.rect_jugador)
+        self.screen.blit(self.imagen_jugador,self.rect_jugador)
         
-        self.fireball.draw(screen)
+        self.stat_bar(screen=self.screen,x=25,y=25,color=G,stat=self.hp)
+        self.stat_bar(screen=self.screen,x=25,y=50,color=B,stat=self.mana)
 
-        self.stat_bar(screen=screen,x=25,y=25,color=G,stat=self.hp)
-        self.stat_bar(screen=screen,x=25,y=50,color=B,stat=self.mana)
-
-        self.collition_line(surface=screen,ancho=100)
 
         if DEBUG:
-            pygame.draw.rect(screen,R,self.rect_jugador,1)
+            pygame.draw.rect(self.screen,R,self.rect_jugador,1)                                                                           

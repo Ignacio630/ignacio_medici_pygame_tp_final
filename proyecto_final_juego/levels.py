@@ -1,18 +1,18 @@
 from config import *
 level_map_1 = [
-    'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
-    'L                                                                  L',
-    'L                                                                  L',
-    'L                                                                  L',
-    'L                                                                  L',
-    'L                                       L    E   L                 L',
-    'L                                        CCCCCCCC                  L',
-    'L                            L    E    L                           L',
-    'L                            CCCCCCCCCC                            L',
-    'L               CCC                                                L',
-    'L               CCC                                                L',
-    'L    P    F     CCC                            L     E      L      L',
-    'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD'
+    'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                                                  C',
+    'C                                       L    E   L                 C',
+    'C                                        CCCCCCCC                  C',
+    'C                            L    E    L                           C',
+    'C                            CCCCCCCCCC                            C',
+    'C               CCC                                                C',
+    'C               CCC                                                C',
+    'C    P    F     CCC                            L     E      L      C',
+    'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD'
 ]
 
 level_map_2 = [

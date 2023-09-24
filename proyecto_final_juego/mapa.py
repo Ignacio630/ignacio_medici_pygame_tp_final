@@ -79,7 +79,7 @@ class Mapa:
                     plataforma = Plataforma((x,y),platform_size,path="{0}".format(PATH_PLATAFORMA),flag=True,frame=15)
                     self.limits_list.append(plataforma)
                 if row == "P":
-                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-16,jump_height=200,gravity=0.8,size=(ANCHO_JUGADOR,ALTO_JUGADOR),pos=(x,y))
+                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-20,jump_height=200,gravity=0.8,size=(ANCHO_JUGADOR,ALTO_JUGADOR),pos=(x,y),screen=self.screen)
                 if row == "E":
                     enemy = Enemy(platform_size,(x,y))
                     self.enemy_list.append(enemy)
@@ -115,6 +115,7 @@ class Mapa:
                 elif player.direction_movement.y > 0:
                     player.rect_jugador.bottom = platform.rect.top                
                     player.direction_movement.y = 0
+                
 
     def update_enemy(self):
         for enemy in self.enemy_list:
@@ -124,11 +125,13 @@ class Mapa:
             else:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
-                if enemy.rect_enemy.colliderect(self.player.rect_melee_attack):
-                    enemy.is_dead = True
+                for fireball in self.player.fireballs:
+                    if enemy.rect_enemy.colliderect(self.player.rect_melee_attack) or \
+                    enemy.rect_enemy.colliderect(fireball.rect):
+                        self.player.fireballs.remove(fireball)
+                        enemy.is_dead = True
 
-    def player_collition_line(self, ):
-        pass
+    
         
 
     def run(self,delta_ms,keys):
@@ -142,15 +145,22 @@ class Mapa:
         for platform in self.platforms_list:
             platform.update(self.world_move)
             platform.draw(self.screen)
-            
+            for fireball in self.player.fireballs:
+                if platform.rect.colliderect(fireball.rect):
+                    self.player.fireballs.remove(fireball)
+
         for limit in self.limits_list:
             limit.update(self.world_move)
             limit.draw(self.screen)
+            
 
         for bonfire in self.bonfire_list:
             bonfire.update(self.player,self.world_move,delta_ms)
             bonfire.draw()
 
+        for fireball in self.player.fireballs:
+            fireball.update(self.world_move,delta_ms)
+            fireball.draw(self.screen)
         self.update_enemy()
 
         #jugador
@@ -161,7 +171,7 @@ class Mapa:
         self.colliders_player_x(player.direction_movement.x,player.rect_jugador)
         self.colliders_player_y(player)
 
-        player.draw(self.screen)
+        player.draw()
         player.map_actions(self.world_move)
 
         self.time_surface = self.font_time.render("Time: " + self.formatted_time(), True, W)
