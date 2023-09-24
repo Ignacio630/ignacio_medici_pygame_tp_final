@@ -34,6 +34,7 @@ class Player:
         self.jump_height = jump_height
         self.start_jump = 0
         #
+        self.is_grounded = False 
         self.is_jumping = False
         self.is_attacking = False
         self.is_shooting = False
@@ -104,8 +105,11 @@ class Player:
             self.animation = self.run_frame_l
     #saltar
     def jump(self):
-        self.direction_movement.y = self.jump_power
-        self.is_jumping = True
+        if self.direction_movement.y == 0:
+            self.direction_movement.y = self.jump_power
+            self.is_jumping = True
+        else:
+            self.is_jumping = False
 
     def inputs(self):
         keys = pygame.key.get_pressed()
@@ -155,26 +159,26 @@ class Player:
         #Aplicar animacion
         self.inputs()
         self.tiempo_transcurrido += delta_ms
-        if (self.tiempo_transcurrido >= 200):
+        if (self.tiempo_transcurrido >= 500):
             self.tiempo_transcurrido = 0
             if(self.frame < len(self.animation)-1):
                 self.frame += 1
             else:
                 self.frame = 0
+        
         self.rect_jugador.x += self.direction_movement.x * self.speed_walk
-        
-        
-
 
     def map_actions(self, world_move):
         if self.direction_movement.x < 0 and self.rect_jugador.x < RESOLUTION_WIDTH / 3:
             world_move.x = 6
             self.speed_walk = 0
             self.speed_run = 0
+
         elif self.direction_movement.x > 0 and self.rect_jugador.x > RESOLUTION_WIDTH - (RESOLUTION_WIDTH / 2):
             world_move.x = -6
             self.speed_walk = 0
             self.speed_run = 0
+            
         else:
             world_move.x = 0
             self.speed_walk = SPEED_WALK

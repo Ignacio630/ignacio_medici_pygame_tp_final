@@ -81,7 +81,7 @@ class Mapa:
                 if row == "P":
                     self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-20,jump_height=200,gravity=0.8,size=(ANCHO_JUGADOR,ALTO_JUGADOR),pos=(x,y),screen=self.screen)
                 if row == "E":
-                    enemy = Enemy(platform_size,(x,y))
+                    enemy = Enemy(path=PATH_ENEMIGO,size=platform_size,pos=(x,y),frames=4)
                     self.enemy_list.append(enemy)
                 if row == "F":
                     campfire = Bonfire(self.screen,(x,y),platform_size)
@@ -126,13 +126,12 @@ class Mapa:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
                 for fireball in self.player.fireballs:
-                    if enemy.rect_enemy.colliderect(self.player.rect_melee_attack) or \
-                    enemy.rect_enemy.colliderect(fireball.rect):
+                    if enemy.rect_enemy.colliderect(self.player.rect_melee_attack):
+                        enemy.hp -= 100
+                    if enemy.rect_enemy.colliderect(fireball.rect):
                         self.player.fireballs.remove(fireball)
-                        enemy.is_dead = True
-
-    
-        
+                        enemy.hp -= 50
+            print(enemy.hp)
 
     def run(self,delta_ms,keys):
         #fondo
@@ -152,8 +151,7 @@ class Mapa:
         for limit in self.limits_list:
             limit.update(self.world_move)
             limit.draw(self.screen)
-            
-
+        
         for bonfire in self.bonfire_list:
             bonfire.update(self.player,self.world_move,delta_ms)
             bonfire.draw()

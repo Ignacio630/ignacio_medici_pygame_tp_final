@@ -39,7 +39,31 @@ T = (0, 0, 0, 0)
 
 DIRECCION = True
 
-platform_size = 52
+
+
+
+#Opciones resolucion
+resolution = 2
+
+if resolution == 0:
+    platform_size = 83
+    RESOLUTION_WIDTH = 1920
+    RESOLUTION_HEIGHT = len(level_map_1) * platform_size
+
+elif resolution == 1:
+    platform_size = 69
+    RESOLUTION_WIDTH = 1600
+    RESOLUTION_HEIGHT = len(level_map_1) * platform_size
+
+elif resolution == 2: 
+    platform_size = 59
+    RESOLUTION_WIDTH = 1366
+    RESOLUTION_HEIGHT = len(level_map_1) * platform_size
+
+else: 
+    platform_size = 59
+    RESOLUTION_WIDTH = 1366
+    RESOLUTION_HEIGHT = len(level_map_1) * platform_size
 
 
 
@@ -48,9 +72,20 @@ platform_size = 52
 # ALTO_PANTALLA = 1080
 
 #JUGADOR
+dificultad = 0
 
-VIDA_JUGADOR = 100
-MANA_JUGADOR = 100
+if dificultad == 0:
+    #Jugador
+    VIDA_JUGADOR = 100
+    MANA_JUGADOR = 100
+    #Enemigo
+    VIDA_ENEMIGO = 200
+elif dificultad == 1:
+    #Jugador
+    VIDA_JUGADOR = 75
+    MANA_JUGADOR = 70
+    #Enemigo
+    VIDA_ENEMIGO = 300
 
 ANCHO_JUGADOR = 70
 ALTO_JUGADOR = 110
@@ -58,9 +93,10 @@ ALTO_JUGADOR = 110
 SPEED_WALK = 4
 SPEED_RUN = 6
 
-#pantalla
-RESOLUTION_WIDTH = 1200
-RESOLUTION_HEIGHT = len(level_map_1) * 52
+#Plataformas
+
+
+
 # #Menu
 MENU_WIDTH = 400
 MENU_HEIGHT = RESOLUTION_HEIGHT
