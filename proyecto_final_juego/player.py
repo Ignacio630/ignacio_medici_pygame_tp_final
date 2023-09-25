@@ -23,7 +23,6 @@ class Player:
         self.rect_jugador = self.imagen_jugador.get_rect(topright = pos)
         #
         self.fireballs = []
-        self.rect_melee_attack = pygame.rect.Rect(0,0,0,0)
         self.rect_collition = pygame.rect.Rect(0,0,0,0)
         #
         self.direction = DIRECCION
@@ -43,16 +42,7 @@ class Player:
         self.mana = MANA_JUGADOR
         self.score = 0
         
-    def melee_attack(self,pantalla):    
-        if self.direction:
-            x, y = self.rect_jugador.topright
-            self.animation = self.attack_frame_r
-            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=T,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
-        else:
-            x, y = self.rect_jugador.topleft
-            self.animation = self.attack_frame_l
-            self.rect_melee_attack = pygame.draw.rect(surface=pantalla,color=T,rect=(x,y,ANCHO_JUGADOR/2,ALTO_JUGADOR))
-          
+
     def collition_line(self):
         pass
 
@@ -60,16 +50,16 @@ class Player:
         if self.mana >= 10:
             if self.direction:
                 self.mana -= 10
-                self.fireballs.append(Fireball("{0}{1}".format(PATH_JUGADOR,PATH_FIREBALL),self.rect_jugador.midleft,(50,25),7,self.direction))
+                self.fireballs.append(Fireball("{0}{1}".format(PATH_JUGADOR,PATH_FIREBALL),self.rect_jugador.midleft,(ANCHO_JUGADOR,ALTO_JUGADOR/4),7,self.direction))
                 for fireball in self.fireballs:
                     fireball.fire(10) 
             else:
                 self.mana -= 10
-                self.fireballs.append(Fireball("{0}{1}".format(PATH_JUGADOR,PATH_FIREBALL),self.rect_jugador.midleft,(50,25),7,self.direction))
+                self.fireballs.append(Fireball("{0}{1}".format(PATH_JUGADOR,PATH_FIREBALL),self.rect_jugador.midleft,(ANCHO_JUGADOR,ALTO_JUGADOR/4),7,self.direction))
                 for fireball in self.fireballs:
                     fireball.fire(-10)  
         else:
-            print("mana insuficiente")
+            print("sin mana")
     # HUD
     def stat_bar(self,screen,x,y,color,stat):
         widht = 300
@@ -142,12 +132,6 @@ class Player:
         if keys[pygame.K_x] == 0 and self.is_shooting:
             self.is_shooting = False
 
-        #Melee attack
-        if keys[pygame.K_z] == 1 and not self.is_attacking:
-            self.melee_attack(self.screen)
-            self.is_attacking = True
-        if keys[pygame.K_z] == 0 and self.is_attacking:
-            self.is_attacking = False
         
     def apply_gravity(self):
         self.direction_movement.y += self.gravity
@@ -157,7 +141,7 @@ class Player:
         #Aplicar animacion
         self.inputs()
         self.tiempo_transcurrido += delta_ms
-        if (self.tiempo_transcurrido >= 500):
+        if (self.tiempo_transcurrido >= 200):
             self.tiempo_transcurrido = 0
             if(self.frame < len(self.animation)-1):
                 self.frame += 1

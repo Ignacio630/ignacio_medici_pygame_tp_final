@@ -1,7 +1,7 @@
 import pygame
 from levels import *
 #fotogramas por segundo del juego
-FPS = 60 
+FPS = 60
 
 #debug
 DEBUG = True
@@ -39,7 +39,7 @@ T = (0, 0, 0, 0)
 DIRECCION = True
 
 #Opciones resolucion
-resolution = 0
+resolution = 2
 
 if resolution == 0:
     JUMP_POWER = 14
@@ -52,6 +52,7 @@ if resolution == 0:
     ANCHO_JUGADOR = 50 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
     ALTO_JUGADOR = 90 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
 
+    
 elif resolution == 1:
     platform_size = 69
 

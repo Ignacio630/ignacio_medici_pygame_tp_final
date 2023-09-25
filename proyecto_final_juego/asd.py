@@ -1,41 +1,40 @@
 import pygame
-import sys
 
-# Inicializa pygame
+
+screen = pygame.display.set_mode((800,800))
+# Define la velocidad del objeto
+objeto = pygame.rect.Rect(10,10,10,10)
+objeto.fill((255,0,0))
+OBJECT_SPEED = 10
+
+# Obtiene el tiempo actual en milisegundos
+current_time = pygame.time.get_ticks()
 pygame.init()
+# Bucle de eventos principal
+while True:
 
-# Configuración de la pantalla
-screen = pygame.display.set_mode((400, 400))
-pygame.display.set_caption("Línea Transparente")
+    # Obtiene el siguiente evento de la cola de eventos
+    event = pygame.event.poll()
 
-# Color rojo sin transparencia
-color_rojo = (255, 0, 0)
+    # Si el evento es un evento de cierre de ventana
+    if event.type == pygame.QUIT:
 
-# Crea una superficie transparente
-surface_transparente = pygame.Surface((400, 400), pygame.SRCALPHA)
+        # Cierra la ventana y sale del bucle de eventos
+        pygame.quit()
+        sys.exit()
 
-# Cambia la transparencia de la superficie (50% de opacidad)
-surface_transparente.set_alpha(0)
+    # Calcula el tiempo transcurrido desde la última vez que se movió el objeto
+    elapsed_time = pygame.time.get_ticks() - current_time
 
-# Loop principal
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    # Si han pasado más de 100 milisegundos desde la última vez que se movió el objeto
+    if elapsed_time >= 100:
 
-    # Limpia la pantalla
-    screen.fill((0, 0, 0))
+        # Mueve el objeto 10 píxeles a la derecha
+        objeto.x += OBJECT_SPEED
+        screen.blit(screen,objeto)
 
-    # Dibuja una línea en la superficie transparente
-    pygame.draw.line(surface_transparente, color_rojo, (100, 100), (300, 300), 5)
+        # Actualiza el tiempo actual
+        current_time = pygame.time.get_ticks()
 
-    # Copia la superficie transparente en la pantalla
-    screen.blit(surface_transparente, (0, 0))
-
-    # Actualiza la pantalla
+    # Renderiza la pantalla
     pygame.display.flip()
-
-# Salir del programa
-pygame.quit()
-sys.exit()

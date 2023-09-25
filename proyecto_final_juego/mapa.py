@@ -21,7 +21,7 @@ class Mapa:
         self.music_playing = False
         self.screen = screen    
         self.world_move = pygame.math.Vector2()
-        self.speed_background = 0.5
+        self.speed_background = 1
         self.scroll = 0
         self.setup_map(level_design)
         self.bg_rect = self.background_list[0].get_rect()
@@ -31,9 +31,10 @@ class Mapa:
         self.start_time = time.time()
         self.time = 0
         self.score = Score("Souls:",(RESOLUTION_WIDTH-125,0),(260,50))
+        
         self.font_time = pygame.font.Font(None, 30)
         self.time_surface = self.font_time.render("Time: " + self.formatted_time(), True, W)
-        self.time_rect = self.time_surface.get_rect(topright=(RESOLUTION_WIDTH - 10, 30))
+        self.time_rect = self.time_surface.get_rect(topright=(RESOLUTION_WIDTH - 20, 30))
         #
     
     def update_time(self):
@@ -44,6 +45,7 @@ class Mapa:
         min = int(self.time // 60)
         seg = int(self.time % 60)
         return "{0:02}:{1:02}".format(min,seg)
+        
     def draw_time(self):
         self.update_time()
         self.screen.blit(self.time_surface, self.time_rect)
@@ -126,12 +128,9 @@ class Mapa:
                 enemy.update(self.world_move,self.limits_list,True)
                 enemy.draw(self.screen)
                 for fireball in self.player.fireballs:
-                    if enemy.rect_enemy.colliderect(self.player.rect_melee_attack):
-                        enemy.hp -= 100
                     if enemy.rect_enemy.colliderect(fireball.rect):
                         self.player.fireballs.remove(fireball)
                         enemy.hp -= 50
-            print(enemy.hp)
 
     def run(self,delta_ms,keys):
         #fondo
