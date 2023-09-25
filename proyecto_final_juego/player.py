@@ -5,7 +5,7 @@ from funciones_utiles import *
 from fireball import Fireball
 
 class Player:
-    def __init__(self,path,speed_walk,speed_run,jump_power,jump_height,gravity,size,pos,screen) -> None:
+    def __init__(self,path,speed_walk,speed_run,jump_power,gravity,size,pos,screen) -> None:
         self.stay_frames_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,False,size)
         self.stay_frames_l = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_STAND),9,True,size)
         self.walk_frame_r = getSurfaceFromSeparateSprite("{0}{1}".format(path,PATH_WALK),6,False,size)
@@ -31,8 +31,6 @@ class Player:
         self.speed_walk = speed_walk
         self.speed_run = speed_run
         self.jump_power = jump_power
-        self.jump_height = jump_height
-        self.start_jump = 0
         #
         self.is_grounded = False 
         self.is_jumping = False
@@ -178,7 +176,7 @@ class Player:
             world_move.x = -6
             self.speed_walk = 0
             self.speed_run = 0
-            
+
         else:
             world_move.x = 0
             self.speed_walk = SPEED_WALK

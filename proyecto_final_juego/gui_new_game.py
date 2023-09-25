@@ -17,5 +17,5 @@ class New_game(Menu):
             self.active = False
 
     def draw(self):
-        super().draw()
+        super().draw()  
         

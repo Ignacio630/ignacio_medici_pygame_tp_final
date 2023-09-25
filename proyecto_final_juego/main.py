@@ -28,6 +28,7 @@ while esta_corriendo:
     delta_ms = tiempo.tick(FPS)
     event_list = pygame.event.get()
     keys = pygame.key.get_pressed()
+    
     for event in event_list: 
         if event.type == pygame.QUIT or main_menu.button_dict["exit"].is_active or keys[pygame.K_ESCAPE]:
             esta_corriendo = False

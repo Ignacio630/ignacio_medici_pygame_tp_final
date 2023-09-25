@@ -50,8 +50,8 @@ class Enemy:
                     self.rect_enemy.top = limit.rect.bottom
                     self.direction.y = self.speed
 
-    def enemy_attack(self):
-        pass
+    def enemy_attack(self,screen):
+        pygame.draw.line(screen,R,(self.rect_enemy.x,100),(self.rect_enemy.x,200))
 
     def kill(self):
         if self.hp <= 0:
@@ -62,13 +62,13 @@ class Enemy:
             self.enemy_movement_x(limits,world_speed)
         else:
             self.enemy_movement_y(limits,world_speed)
-        
+
         self.kill()
 
     def draw(self,screen):
         if not self.is_dead:
             screen.blit(self.surface_enemy,self.rect_enemy)
-            self.stat_bar(screen=screen,x=self.rect_enemy.x,y=self.rect_enemy.y-20,color=G,stat=self.hp)
-
+            self.stat_bar(screen=screen,x=self.rect_enemy.x,y=self.rect_enemy.y-25,color=G,stat=self.hp)
+            self.enemy_attack(screen)
         if DEBUG:
             pygame.draw.rect(screen,R,self.rect_enemy,1)

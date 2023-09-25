@@ -36,35 +36,54 @@ W = (255,255,255)
 T = (0, 0, 0, 0)
 
 #direccion
-
 DIRECCION = True
 
-
-
-
 #Opciones resolucion
-resolution = 2
+resolution = 0
 
 if resolution == 0:
+    JUMP_POWER = 14
+    
     platform_size = 83
+    
     RESOLUTION_WIDTH = 1920
     RESOLUTION_HEIGHT = len(level_map_1) * platform_size
 
+    ANCHO_JUGADOR = 50 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
+    ALTO_JUGADOR = 90 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
+
 elif resolution == 1:
     platform_size = 69
+
+    JUMP_POWER = 13
+    
     RESOLUTION_WIDTH = 1600
     RESOLUTION_HEIGHT = len(level_map_1) * platform_size
 
+    ANCHO_JUGADOR = 40 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
+    ALTO_JUGADOR = 80 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
+
 elif resolution == 2: 
     platform_size = 59
+    
+    JUMP_POWER = 12
+    
     RESOLUTION_WIDTH = 1366
     RESOLUTION_HEIGHT = len(level_map_1) * platform_size
+    
+    ANCHO_JUGADOR = 40 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
+    ALTO_JUGADOR = 70 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
 
 else: 
     platform_size = 59
+
+    JUMP_POWER = 12
+    
     RESOLUTION_WIDTH = 1366
     RESOLUTION_HEIGHT = len(level_map_1) * platform_size
 
+    ANCHO_JUGADOR = 40 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
+    ALTO_JUGADOR = 70 * (RESOLUTION_WIDTH / RESOLUTION_HEIGHT)
 
 
 #definimos las dimensiones iniciales de la pantalla
@@ -87,8 +106,7 @@ elif dificultad == 1:
     #Enemigo
     VIDA_ENEMIGO = 300
 
-ANCHO_JUGADOR = 70
-ALTO_JUGADOR = 110
+
 
 SPEED_WALK = 4
 SPEED_RUN = 6

@@ -79,7 +79,7 @@ class Mapa:
                     plataforma = Plataforma((x,y),platform_size,path="{0}".format(PATH_PLATAFORMA),flag=True,frame=15)
                     self.limits_list.append(plataforma)
                 if row == "P":
-                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-20,jump_height=200,gravity=0.8,size=(ANCHO_JUGADOR,ALTO_JUGADOR),pos=(x,y),screen=self.screen)
+                    self.player = Player(path=PATH_JUGADOR,speed_walk=SPEED_WALK,speed_run=SPEED_RUN,jump_power=-JUMP_POWER*(RESOLUTION_WIDTH/RESOLUTION_HEIGHT),gravity=0.8,size=(ANCHO_JUGADOR,ALTO_JUGADOR),pos=(x,y),screen=self.screen)
                 if row == "E":
                     enemy = Enemy(path=PATH_ENEMIGO,size=platform_size,pos=(x,y),frames=4)
                     self.enemy_list.append(enemy)
